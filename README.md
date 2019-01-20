@@ -28,4 +28,5 @@ This will start the main server, everything depends on the roscore running. You 
 roscore
 
 Next run the following, make sure to do it in the same terminal that you ran the source command in. Otherwise it will not work, the ros commands need to know where everything is. When we build catkin_make will generate all the paths for us, so when we enter the virutal enviroment we don't need to specify the direct path to our scripts.
-rosrun state_machine state_machine.py
+
+`rosrun state_machine state_machine.py`
