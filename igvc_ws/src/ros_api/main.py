@@ -10,5 +10,9 @@ import rospy
 
 class ROS_Handler(object):
     def __init__(self):
-        pass
+        rospy.init_node('test_server')
+        s = rospy.Service('test_server', run_test, self.test)
+
+    def test(self):
+        print ('this is a test function')
 

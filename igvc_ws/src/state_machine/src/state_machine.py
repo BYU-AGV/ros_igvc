@@ -13,7 +13,7 @@ class StateMachine:
     def execute(self):
         rospy.loginfo("Now entering the node loop")
         while not rospy.is_shutdown():
-            pass
+            passz
 
 
 if __name__ == '__main__':
