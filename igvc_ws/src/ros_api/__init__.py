@@ -9,5 +9,6 @@ Author: Isaac
 from main import ROS_Handler
 from main import ROS_Publisher
 from main import ROS_Subscriber
-from main import println
+
+from util import println
 

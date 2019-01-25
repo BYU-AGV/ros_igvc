@@ -1,20 +1,15 @@
 #!/usr/bin/env python
 
 '''
-This is the core ros module that external users will use to call ROS functions
+This is the core ros module that wraps key ROS functions that external users will use to call ROS functions
 Last Updated: 25 Jan 2019
 Author: Isaac
 '''
 
-import sys
+from util import println
 
 import rospy
 import std_msgs.msg as msg
-
-def println (*msg, **kwargs):
-    if 'end' not in kwargs: kwargs['end'] = '\n'
-    sys.stdout.write(''.join(map(str, msg)).strip() + kwargs['end'])
-    sys.stdout.flush()
 
 class ROS_Handler(object):
     def __init__(self, svr_name, topic, msg_type, rate):
