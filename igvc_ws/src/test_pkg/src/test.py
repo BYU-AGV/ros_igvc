@@ -1,30 +1,26 @@
 #!/usr/bin/env python
+
+'''
+A test script to act as a publisher from the ros_api.
+Last Updated: 25 Jan 2019
+Author: Isaac
+'''
+
 import rospy
 from geometry_msgs.msg import Twist
+
+import std_msgs.msg as msg
 
 import ros_api as ros
 from ros_api import println
 
-'''
-class StateMachine:
-    def __init__(self):
-        rospy.init_node('test_pkg')
-
-        # set rate
-        hz = 60 # set the number of times this node is executed a second
-        self.rate = rospy.Rate(hz)
-        println('Starting test pkg')
-    def execute(self):
-        println('Entered main loop')
-        while not rospy.is_shutdown():
-            pass
-        println('Exiting main loop')
-'''
-
 if __name__ == '__main__':
-    # StateMachine = StateMachine()
-    # StateMachine.execute()
+    println('Starting test pkg')
 
-    handler = ros.ROS_Handler()
+    handler = ros.ROS_Publisher('test_publisher', 'test_topic', msg.Int32)
+    while not rospy.is_shutdown():
+        handler.send(32)
+        rospy.sleep(1)
+
 
     println('Node finished with no errors')
