@@ -61,7 +61,7 @@ class ROS_Publisher(ROS_Handler):
         super(ROS_Publisher,self).__init__(svr_name, topic, msg_type, rate)
         self.pub = rospy.Publisher(self.topic, self.msg_type, queue_size=q_size)
 
-    def send(self, arg):
+    def send(self, *args):
         ''' Publishes data to the topic when created
 
             Args:   arg - the data to be passed, must match the format of self.msg_type
@@ -69,8 +69,8 @@ class ROS_Publisher(ROS_Handler):
             Returns:    None
         '''
 
-        self.pub.publish(arg)
-        println('Sent: {}'.format(arg))
+        self.pub.publish(*args)
+        println('Sent: {}'.format(args))
 
 class ROS_Subscriber(ROS_Handler):
     '''
@@ -98,7 +98,7 @@ class ROS_Subscriber(ROS_Handler):
             Returns: None
         '''
 
-        println('Recieved: {}'.format(data.data))
+        println('Recieved: {}'.format(data))
 
     def new_callback(self, call):
         ''' Re-creates the subscriber with a different callback function
