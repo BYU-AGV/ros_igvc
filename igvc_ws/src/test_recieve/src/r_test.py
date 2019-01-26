@@ -7,8 +7,8 @@ Author: Isaac
 '''
 
 
-import std_msgs.msg
-import test_pkg.msg as msg
+import std_msgs.msg as std_msgs
+import custom_msgs.msg as msgs
 
 import ros_api as ros
 from ros_api import println
@@ -21,7 +21,7 @@ def custom_callback(data):
 if __name__ == '__main__':
     println('Starting test revieve')
 
-    handler = ros.ROS_Subscriber('other_svr', 'test_topic', msg.coord)
+    handler = ros.ROS_Subscriber('other_svr', 'test_topic', msgs.coord)
     rospy.spin()
 
     println('Node finished with no errors')
