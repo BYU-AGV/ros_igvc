@@ -21,7 +21,7 @@ def custom_callback(data):
 if __name__ == '__main__':
     println('Starting test revieve')
 
-    handler = ros.ROS_Subscriber('other_svr', 'test_topic', msg.coord, call=custom_callback)
+    handler = ros.ROS_Subscriber('other_svr', 'test_topic', msg.coord)
     rospy.spin()
 
     println('Node finished with no errors')

@@ -20,7 +20,8 @@ if __name__ == '__main__':
     
     handler = ros.ROS_Publisher('test_publisher', 'test_topic', msg.coord)
     while not rospy.is_shutdown():
-        handler.send(32,10,500)
+        # handler.send(32,10,500)
+        handler.send(x=10,y=32,z=40)
         rospy.sleep(1)
 
 

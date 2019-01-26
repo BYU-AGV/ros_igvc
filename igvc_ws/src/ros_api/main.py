@@ -61,16 +61,17 @@ class ROS_Publisher(ROS_Handler):
         super(ROS_Publisher,self).__init__(svr_name, topic, msg_type, rate)
         self.pub = rospy.Publisher(self.topic, self.msg_type, queue_size=q_size)
 
-    def send(self, *args):
+    def send(self, *args, **kwargs):
         ''' Publishes data to the topic when created
 
             Args:   arg - the data to be passed, must match the format of self.msg_type
+                    kwargs - the data to be passed with keyword arguments, must match the format of self.msg_type
 
             Returns:    None
         '''
 
-        self.pub.publish(*args)
-        println('Sent: {}'.format(args))
+        self.pub.publish(*args, **kwargs)
+        println('Sent: {}'.format(args)) if len(args) > 0 else println('Sent: {}'.format(kwargs))
 
 class ROS_Subscriber(ROS_Handler):
     '''
