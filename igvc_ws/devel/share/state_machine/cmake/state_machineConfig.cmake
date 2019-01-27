@@ -67,14 +67,23 @@ set(state_machine_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
+<<<<<<< HEAD
   set(state_machine_SOURCE_PREFIX /home/justb/ros_initial/igvc_ws/src/state_machine)
   set(state_machine_DEVEL_PREFIX /home/justb/ros_initial/igvc_ws/devel)
+=======
+  set(state_machine_SOURCE_PREFIX /home/igvc/ros_initial/igvc_ws/src/state_machine)
+  set(state_machine_DEVEL_PREFIX /home/igvc/ros_initial/igvc_ws/devel)
+>>>>>>> master
   set(state_machine_INSTALL_PREFIX "")
   set(state_machine_PREFIX ${state_machine_DEVEL_PREFIX})
 else()
   set(state_machine_SOURCE_PREFIX "")
   set(state_machine_DEVEL_PREFIX "")
+<<<<<<< HEAD
   set(state_machine_INSTALL_PREFIX /home/justb/ros_initial/igvc_ws/install)
+=======
+  set(state_machine_INSTALL_PREFIX /home/igvc/ros_initial/igvc_ws/install)
+>>>>>>> master
   set(state_machine_PREFIX ${state_machine_INSTALL_PREFIX})
 endif()
 
@@ -110,7 +119,11 @@ if(NOT " " STREQUAL " ")
         message(FATAL_ERROR "Project 'state_machine' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
+<<<<<<< HEAD
       message(FATAL_ERROR "Project 'state_machine' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/justb/ros_initial/igvc_ws/src/state_machine/${idir}'.  ${_report}")
+=======
+      message(FATAL_ERROR "Project 'state_machine' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/igvc/ros_initial/igvc_ws/src/state_machine/${idir}'.  ${_report}")
+>>>>>>> master
     endif()
     _list_append_unique(state_machine_INCLUDE_DIRS ${include})
   endforeach()
@@ -129,7 +142,11 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
+<<<<<<< HEAD
     foreach(path /home/justb/ros_initial/igvc_ws/devel/lib;/opt/ros/melodic/lib)
+=======
+    foreach(path /home/igvc/ros_initial/igvc_ws/devel/lib;/home/igvc/ros_initial/igvc_ws/devel/lib;/opt/ros/kinetic/lib)
+>>>>>>> master
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
