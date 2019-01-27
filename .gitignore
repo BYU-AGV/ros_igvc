@@ -120,6 +120,6 @@ dmypy.json
 *.swo
 
 # builds and devel folder for ROS
-devel/
-build/
-install/
+*/devel/
+*/build/
+*/install/
