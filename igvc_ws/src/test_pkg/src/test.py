@@ -2,7 +2,7 @@
 
 '''
 A test script to act as a publisher from the ros_api.
-Last Updated: 25 Jan 2019
+Last Updated: 26 Jan 2019
 Author: Isaac
 '''
 
@@ -15,11 +15,14 @@ from ros_api import println, ros_is_running, ros_sleep
 
 if __name__ == '__main__':
     println('Starting test pkg')
-
+    
     handler = ros.ROS_Publisher('test_publisher', 'test_topic', msgs.coord)
     while ros_is_running():
         # handler.send(32,10,500)
-        handler.send(x=10,y=32,z=40)
+        # handler.send(x=10,y=32,z=40)
+
+        m = ros.json_to_msg('{"x":5,"y":2,"z":14}', msgs.coord)
+        handler.send(m)
         ros_sleep(1)
 
 

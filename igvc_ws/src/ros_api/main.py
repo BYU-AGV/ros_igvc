@@ -2,14 +2,15 @@
 
 '''
 This is the core ros module that wraps key ROS functions that external users will use to call ROS functions
-Last Updated: 25 Jan 2019
+Last Updated: 26 Jan 2019
 Author: Isaac
 '''
 
 from util import println
 
 import rospy
-import std_msgs.msg as msg
+import std_msgs.msg as std_msgs
+import custom_msgs.msg as msgs
 
 class ROS_Handler(object):
     '''
