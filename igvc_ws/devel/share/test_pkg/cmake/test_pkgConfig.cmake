@@ -67,14 +67,14 @@ set(test_pkg_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(test_pkg_SOURCE_PREFIX /home/igvc/ros_initial/igvc_ws/src/test_pkg)
-  set(test_pkg_DEVEL_PREFIX /home/igvc/ros_initial/igvc_ws/devel)
+  set(test_pkg_SOURCE_PREFIX /home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/src/test_pkg)
+  set(test_pkg_DEVEL_PREFIX /home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/devel)
   set(test_pkg_INSTALL_PREFIX "")
   set(test_pkg_PREFIX ${test_pkg_DEVEL_PREFIX})
 else()
   set(test_pkg_SOURCE_PREFIX "")
   set(test_pkg_DEVEL_PREFIX "")
-  set(test_pkg_INSTALL_PREFIX /home/igvc/ros_initial/igvc_ws/install)
+  set(test_pkg_INSTALL_PREFIX /home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/install)
   set(test_pkg_PREFIX ${test_pkg_INSTALL_PREFIX})
 endif()
 
@@ -91,15 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(test_pkg_FOUND_CATKIN_PROJECT TRUE)
 
-<<<<<<< HEAD
 if(NOT "/home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/devel/include " STREQUAL " ")
   set(test_pkg_INCLUDE_DIRS "")
   set(_include_dirs "/home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/devel/include")
-=======
-if(NOT "/home/igvc/ros_initial/igvc_ws/devel/include " STREQUAL " ")
-  set(test_pkg_INCLUDE_DIRS "")
-  set(_include_dirs "/home/igvc/ros_initial/igvc_ws/devel/include")
->>>>>>> 2cd3fff36456902402e52f1684bbb3cd465cc1f0
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -116,7 +110,7 @@ if(NOT "/home/igvc/ros_initial/igvc_ws/devel/include " STREQUAL " ")
         message(FATAL_ERROR "Project 'test_pkg' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'test_pkg' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/igvc/ros_initial/igvc_ws/src/test_pkg/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'test_pkg' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/src/test_pkg/${idir}'.  ${_report}")
     endif()
     _list_append_unique(test_pkg_INCLUDE_DIRS ${include})
   endforeach()
@@ -135,7 +129,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/igvc/ros_initial/igvc_ws/devel/lib;/home/igvc/ros_initial/igvc_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/devel/lib;/home/isaac/Desktop/IGVC_workspace/ros_initial/igvc_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
