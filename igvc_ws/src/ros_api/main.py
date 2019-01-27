@@ -57,7 +57,7 @@ class ROS_Publisher(ROS_Handler):
 
             Returns: A ROS_Publisher object
         '''
-        
+
         super(ROS_Publisher,self).__init__(svr_name, topic, msg_type, rate)
         self.pub = rospy.Publisher(self.topic, self.msg_type, queue_size=q_size)
 
@@ -124,10 +124,3 @@ class ROS_Subscriber(ROS_Handler):
         self.sub.unregister()
         self.topic = topic
         self.sub = rospy.Subscriber(self.topic, self.msg_type, self.callback)
-
-
-
-
-
-
-
