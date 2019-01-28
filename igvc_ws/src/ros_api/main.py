@@ -18,13 +18,15 @@ class ROS_Handler(object):
         It typically should not be created, rather is a base class for inheritance.
     '''
 
-    def __init__(self, svr_name, topic, msg_type, rate):
+    def __init__(self, svr_name, topic, msg_type, rate, anonymous=False):
         ''' This is the ROS_Handler constructor
 
             Args:   svr_name - the name of the node to initialize
                     topic - the topic name (this must be the same for the subscriber and publisher for communication)
                     msg_type - the ROS message being passed
                     rate - number of times per second the node is run by ROS
+
+            Kwargs: anonymous - initializes the node as anonymous (for subscribers)
 
             Returns:    A ROS_Handler object
         '''
@@ -33,7 +35,7 @@ class ROS_Handler(object):
         self.topic = topic
         self.msg_type = msg_type
 
-        rospy.init_node(self.svr_name)
+        rospy.init_node(self.svr_name, anonymous=anonymous)
         self.rate = rospy.Rate(rate)
 
     def set_rate(self, r):
@@ -88,7 +90,7 @@ class ROS_Subscriber(ROS_Handler):
             Returns: A ROS_Subscriber object
         '''
 
-        super(ROS_Subscriber,self).__init__(svr_name, topic, msg_type, rate)
+        super(ROS_Subscriber,self).__init__(svr_name, topic, msg_type, rate, anonymous=True)
         self.callback = self.default_callback if call == None else call
         self.sub = rospy.Subscriber(self.topic, self.msg_type, self.callback)
 
