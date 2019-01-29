@@ -7,7 +7,7 @@ import os
 import json as j
 
 import rospy
-import ros_api
+import ros_api as ros
 
 import custom_msgs.msg as msg
 import std_msgs as std_msgs
@@ -18,7 +18,8 @@ app = Flask(__name__)
 
 # Varialbes go here
 publisher = None # this is the publisher
-
+gps_location = None
+acceleration = None
 
 @app.route('/webhook')
 def webhook():
@@ -27,14 +28,34 @@ def webhook():
 
 @app.route('/webhook/accelerometer', methods=['GET', 'POST'])
 def accel():
+    global acceleration
     if request.method == 'POST':
         data = request.data
         json = j.loads(data)
+        acceleration = json
         rospy.loginfo('/webhook/accelerometer{' +  'type: ' + str(json['type']) + ', x: ' + str(json['x']) + ', y: ' + str(json['y']) + ', z: ' + str(json['z']) + '}')
         return 'success'
-    else:
+    elif request.method == 'GET':
+        #rospy.loginfo("Getting gps location")
+        return jsonify(acceleration)
+
+
+@app.route('/webhook/gps', methods=['GET', 'POST'])
+def gps():
+    global gps_location
+    if request.method == 'POST':
+        json = j.loads(request.data)
+        gps_location = json
+        rospy.loginfo('/webhook/gps{' + 'latitude: ' +  str(json['latitude']) + ', longitude: ' + str(json['longitude']) + ', altitude: ' + str(json['altitude']) + ', accuracy: ' + str(json['accuracy']) + ' speed: ' + str(json['speed']) + ', speed_accuracy: ' +  str(json['speed_accuracy']) + '}')
+        
+        if publisher is not None:
+            publisher.send(ros.json_to_msg(request.data, msg.gps))
+
         return 'success'
-    return "success"
+    else:
+        return jsonify(gps_location)
+    return 'failed'
+
 
 
 @app.route('/ping')
@@ -44,8 +65,10 @@ def ping():
 
 
 def startROS():
-    pub = rospy.Publisher('sensor_webhook', msg.accelerometer, queue_size=10)
-    rospy.init_node('sesnor_webhook_server', anonymous=True)
+    #publisher = rospy.Publisher('sensor_webhook', msg.accelerometer, queue_size=10)
+    #rospy.init_node('sesnor_webhook_server', anonymous=True)
+    global publisher
+    publisher = ros.ROS_Publisher('gps_publisher', 'gps_location', msg.gps)
     rospy.loginfo("Webhook is starting")
 
 

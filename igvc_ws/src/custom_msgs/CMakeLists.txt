@@ -47,6 +47,7 @@ add_message_files(
   FILES
   coord.msg
   accelerometer.msg
+  gps.msg
 )
 
 ## Generate services in the 'srv' folder
