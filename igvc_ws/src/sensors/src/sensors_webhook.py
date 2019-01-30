@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+'''
+Discription: ROS node that recieves sensor information via a micro server
+Last Modified: 30 Jan 2019
+Author: Ben Brenkman
+'''
+
 import socket
 import fcntl
 import struct
