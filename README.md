@@ -2,7 +2,7 @@
 This is our main repository for our robot using the Robot Operating System. Visit our wiki to learn more about the strucure of the project and how to contribute. You can also go through the steps below to get started.
 
 # Getting started
-To get started please follow installation instructions for ros here http://wiki.ros.org/ROS/Installation. ROS only works on linux distributions, it is recommended to install the latest version on Ubuntu as ROS is developed on Ubuntu and a clean intsallation of Ubuntu will contain all the dependencies you need. Once you have followed the instructions on the ROS wiki for installation, getting the project to run is simple.
+To get started please follow installation instructions for ros [here](http://wiki.ros.org/ROS/Installation). ROS only works on linux distributions, it is recommended to install the latest version on Ubuntu as ROS is developed on Ubuntu and a clean intsallation of Ubuntu will contain all the dependencies you need. Once you have followed the instructions on the ROS wiki for installation, getting the project to run is simple.
 
 ## Workspace
 The first step is to get the workspace set up on your linux machine. To do this clone this repsository anywhere, for the sake of this tutorial we will clone the repository in the home folde ~/. Navigate to the home folder by opening up a terminal and typing
