@@ -56,7 +56,7 @@ def accel():
         json_data = json.loads(data)
         acceleration = json_data
         rospy.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
-        return jsonify({'status': 'success'})
+        return True
     elif request.method == 'GET':
         return jsonify(acceleration)
 
@@ -85,10 +85,9 @@ def gps():
     if publisher is not None:
         publisher.send(ros.json_to_msg(request.data, msgs.gps))
 
-        return 'success'
+        return True
     else:
         return jsonify(gps_location)
-    return 'failed'
 
 
 
@@ -98,7 +97,7 @@ JSON string with status as success. Only GET method allowed
 '''
 @app.route('/ping')
 def ping():
-    return jsonify({'status': 'success'})
+    return True
 
 
 '''
