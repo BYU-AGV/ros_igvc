@@ -1,5 +1,5 @@
 # ros_initial
-This is a starter project to help everyone get used to ROS and familiar with its structure
+This is our main repository for our robot using the Robot Operating System
 
 # Getting started
 To get started please follow installation instructions for ros here http://wiki.ros.org/ROS/Installation. ROS only works on linux distributions, it is recommended to install the latest version on Ubuntu as ROS is developed on Ubuntu and a clean intsallation of Ubuntu will contain all the dependencies you need. Once you have followed the instructions on the ROS wiki for installation, getting the project to run is simple.
