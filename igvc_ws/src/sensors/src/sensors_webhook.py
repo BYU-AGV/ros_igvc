@@ -68,7 +68,7 @@ GET:
     will return the last known GPS location as a JSON string using the same format 
     as we use in the custom message.
 
-POst:
+POST:
     Submit the URL as is with the body as a JSON string in the format of the custom 
     GPS message used in ROS to update the GPS location. We will then publish the 
     message to ROS on the topic 'gps_location'
