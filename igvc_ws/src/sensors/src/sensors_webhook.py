@@ -8,6 +8,7 @@ import json
 
 import rospy
 import ros_api as ros
+from ros_api import println
 
 import custom_msgs.msg as msgs
 import std_msgs as std_msgs
@@ -119,5 +120,4 @@ def get_inet_address():
 if __name__ == '__main__':
     print "Running on: " + get_inet_address()
     start_ros()
-    print("Starting the server")
     app.run(host='0.0.0.0')
