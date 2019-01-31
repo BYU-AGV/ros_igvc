@@ -2,7 +2,7 @@
 
 '''
 A test script to recieve data using ros_api
-Last Updated: 26 Jan 2019
+Last Updated: 31 Jan 2019
 Author: Isaac
 '''
 
@@ -11,7 +11,7 @@ import std_msgs.msg as std_msgs
 import custom_msgs.msg as msgs
 
 import ros_api as ros
-from ros_api import println, ros_spin
+from ros_api import println, spin
 
 def custom_callback(data):
     #println('Recieved custom: {}'.format(data))
@@ -20,8 +20,10 @@ def custom_callback(data):
 if __name__ == '__main__':
     println('Starting test revieve')
 
-    handler = ros.ROS_Subscriber('test_subscriber', 'test_topic', msgs.coord, call=custom_callback)
-    ros_spin()
+    ros.init_node('test')
+    sub1 = ros.ROS_Subscriber( 'test_topic', msgs.coord, call=custom_callback)
+    sub2 = ros.ROS_Subscriber('another_topic', msgs.coord)
+    spin()
 
     println('Node finished with no errors')
 
