@@ -1,7 +1,7 @@
 # How to Contribute
 Once you have set up the project on your computer you are ready to contribute. There are several ways that you can contribute, and it doesn't matter how much experience you have with coding we have something for you.
 
-Please ready all the documentation about contributing before you do anything. Since we have code running on multiple computers and several people working on the project at the same time we need to make sure we don't over write each others work. Git is used for our version control system, long story short it keep track of all changes made to the code. If anything goes wrong, it won't mess up everyone else's code and lets you reset your part. Even if you accidentally delete something we can revert it.
+Please read all the documentation about contributing before you do anything. Since we have code running on multiple computers and several people working on the project at the same time we need to make sure we don't over write each others work. Git is used for our version control system, long story short it keeps track of all changes made to the code. If anything goes wrong, it won't mess up everyone else's code and lets you reset your part. Even if you accidentally delete something we can revert it.
 
 Our code is in something call a repository, fancy for folder that has all the code, git will keep track of all files in the repository. GitHub.com is just a website that lets us put our code in the cloud for free. If you are not familiar with git, or you want to understand how we use git with our project go to this page about [GitHub steps](https://github.com/BYU-IGVC/ros_igvc/wiki/Github-Steps)
 
@@ -14,7 +14,7 @@ If you are familiar with Trello then projects will be easy for you, they are jus
 ### Creating an Issue
 To create and issue click on the Issues tab, click on the new issue button. 
 1. Fill in the name then the description, make sure you specificity as much as possible what the issue is about. Include specifications that must be met in order to close the issue. 
-2.Assign someone if you have someone in mind, you can also leave it blank so anyone can decide to work on it. 
+2. Assign someone if you have someone in mind, you can also leave it blank so anyone can decide to work on it. 
 3. Add labels to the issue, this is very important as it will help understand what the issue is about without having to open it.
 4. Add to the project, right now we only have one called igvc. This will automatically add the issue to the TODO column in that project
 5. Add milestones, this is like a mini project. Optional.
