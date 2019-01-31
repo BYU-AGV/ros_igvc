@@ -21,8 +21,8 @@ if __name__ == '__main__':
     println('Starting test revieve')
 
     ros.init_node('test')
-    sub1 = ros.ROS_Subscriber( 'test_topic', msgs.coord, call=custom_callback)
-    sub2 = ros.ROS_Subscriber('another_topic', msgs.coord)
+    sub1 = ros.Subscriber( 'test_topic', msgs.coord, call=custom_callback)
+    sub2 = ros.Subscriber('another_topic', msgs.coord)
     spin()
 
     println('Node finished with no errors')

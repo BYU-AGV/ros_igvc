@@ -13,7 +13,7 @@ import rospy
 import std_msgs.msg as std_msgs
 import custom_msgs.msg as msgs
 
-class ROS_Handler(object):
+class Handler(object):
     '''
         This is a root class to initialize a node for ROS communicaion.
         It typically should not be created, rather is a base class for inheritance.
@@ -42,7 +42,7 @@ class ROS_Handler(object):
         self.rate = rospy.Rate(r)
 
 
-class ROS_Publisher(ROS_Handler):
+class Publisher(Handler):
     '''
         A basic wrapper for a ROS publisher.
     '''
@@ -56,7 +56,7 @@ class ROS_Publisher(ROS_Handler):
             Returns: A ROS_Publisher object
         '''
 
-        super(ROS_Publisher,self).__init__(topic, msg_type, rate)
+        super(Publisher,self).__init__(topic, msg_type, rate)
         self.pub = rospy.Publisher(self.topic, self.msg_type, queue_size=q_size)
 
     def send(self, *args, **kwargs):
@@ -71,7 +71,7 @@ class ROS_Publisher(ROS_Handler):
         self.pub.publish(*args, **kwargs)
         println('Sent: {}'.format(args)) if len(args) > 0 else println('Sent: {}'.format(kwargs))
 
-class ROS_Subscriber(ROS_Handler):
+class Subscriber(Handler):
     '''
         A basic wrapper for a ROS subscriber.
     '''
@@ -85,7 +85,7 @@ class ROS_Subscriber(ROS_Handler):
             Returns: A ROS_Subscriber object
         '''
 
-        super(ROS_Subscriber,self).__init__(topic, msg_type, rate)
+        super(Subscriber,self).__init__(topic, msg_type, rate)
         self.callback = self.default_callback if call == None else call
         self.sub = rospy.Subscriber(self.topic, self.msg_type, self.callback)
 
