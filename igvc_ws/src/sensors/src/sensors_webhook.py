@@ -168,7 +168,7 @@ This initializes the ROS node and sets up publishers
 '''
 def start_ros():
     global gps_pub, imu_pub, gyroscope_pub, compass_pub
-    gps_pub = rospy.Publisher('gps_location', msgs.gps, queue_size=10)
+    gps_pub = rospy.Publisher('gps_sensor', msgs.gps, queue_size=10)
     imu_pub = rospy.Publisher('imu_sensor', msgs.imu, queue_size=10)
     gyroscope_pub = rospy.Publisher('gyroscope_sensor', msgs.gyroscope, queue_size=10)
     compass_pub = rospy.Publisher('compass_sensor', msgs.compass, queue_size=10)
