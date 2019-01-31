@@ -27,7 +27,7 @@ def callback(gps_data):
     This starts up the node, sets up a subscriber for getting last know gps location
 '''
 def start_listening():
-    sub = ros.ROS_Subscriber('gps_node', 'gps_location', msgs.gps, callback)
+    sub = ros.ROS_Subscriber('gps_node', 'gps_sensor', msgs.gps, callback)
     ros.ros_spin()
 
 
