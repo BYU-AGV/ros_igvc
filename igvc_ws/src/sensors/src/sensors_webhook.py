@@ -23,10 +23,17 @@ from flask import Flask, request, abort, Response, jsonify
 
 app = Flask(__name__)
 
-# Varialbes go here
-publisher = None # this is the publisher
+# Publishers
+gps_pub = None # this is the publisher
+imu_pub = None
+gyroscope_pub = None
+compass_pub = None
+
+# Storage variables
 gps_location = None # stores the last known GPS coordinates
-acceleration = None # stores last known IMU data
+imu_data = None # stores last known IMU data
+gyroscope_data = None # stores last known gyroscope data
+compass_data = None # last known compass heading
 
 
 '''
@@ -56,15 +63,16 @@ POST:
 '''
 @app.route('/webhook/accelerometer', methods=['GET', 'POST'])
 def accel():
-    global acceleration
+    global imu_data
     if request.method == 'POST':
         data = request.data
         json_data = json.loads(data)
-        acceleration = json_data
-        rospy.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
+        imu_data = json_data
+        rospy.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + ', duration: ' + str(json_data['duration']) + '}')
+        imu_pub.publish(ros.json_to_msg(request.data, msgs.imu))
         return True
     elif request.method == 'GET':
-        return jsonify(acceleration)
+        return jsonify(imu_data)
 
 
 ''' This is the GPS webhook, updates and gets the last known GPS location about the
@@ -88,13 +96,62 @@ def gps():
         gps_location = json_data
         rospy.loginfo('/webhook/gps{' + 'latitude: ' +  str(json_data['latitude']) + ', longitude: ' + str(json_data['longitude']) + ', altitude: ' + str(json_data['altitude']) + ', accuracy: ' + str(json_data['accuracy']) + ' speed: ' + str(json_data['speed']) + ', speed_accuracy: ' +  str(json_data['speed_accuracy']) + '}')
         
-    if publisher is not None:
-        publisher.send(ros.json_to_msg(request.data, msgs.gps))
-
+    if gps_pub is not None:
+        gps_pub.publish(ros.json_to_msg(request.data, msgs.gps))
         return True
     else:
         return jsonify(gps_location)
 
+
+'''
+Compass update and get webhook
+GET:
+    If you want to submit a GET method, you can submit the URL as is. The GET method
+    will return the last known GPS location as a JSON string using the same format
+    as we use in the custom message.
+
+POST:
+    Submit the URL as is with the body as a JSON string in the format of the custom
+    GPS message used in ROS to update the GPS location. We will then publish the
+    message to ROS on the topic 'gyroscope'
+'''
+
+@app.route('/webhook/gyroscope', methods=['GET', 'POST'])
+def gyroscope():
+    global gyroscope_data
+    if request.method == 'POST':
+        json_data = json.loads(request.data)
+        gyroscope_data = json_data
+        rospy.loginfo('/webhook/gyroscope{' + 'x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
+        gyroscope_pub.publish(ros.json_to_msg(request.data, msgs.gyroscope))
+        return True
+    else:
+        return jsonify(gyroscope_data)
+
+
+'''
+Compass update and get webhook
+GET:
+    If you want to submit a GET method, you can submit the URL as is. The GET method
+    will return the last known GPS location as a JSON string using the same format 
+    as we use in the custom message.
+
+POST:
+    Submit the URL as is with the body as a JSON string in the format of the custom 
+    GPS message used in ROS to update the GPS location. We will then publish the 
+    message to ROS on the topic 'compass'
+'''
+@app.route('/webhook/compass', methods=['GET', 'POST'])
+def compass():
+    global compass_data
+    if request.method == 'POST':
+        json_data = json.loads(request.data)
+        compass_data = json_data
+        rospy.loginfo('/webhook/compass{' + 'heading: ' + str(json_data['heading']) + '}')
+        compass_pub.publish(ros.json_to_msg(request.data, msgs.compass))
+        return True
+    else:
+        return jsonify(compass_data)
 
 
 ''' 
@@ -110,8 +167,12 @@ def ping():
 This initializes the ROS node and sets up publishers
 '''
 def start_ros():
-    global publisher
-    publisher = ros.ROS_Publisher('gps_publisher', 'gps_location', msgs.gps)
+    global gps_pub, imu_pub, gyroscope_pub, compass_pub
+    gps_pub = rospy.Publisher('gps_location', msgs.gps, queue_size=10)
+    imu_pub = rospy.Publisher('imu_sensor', msgs.imu, queue_size=10)
+    gyroscope_pub = rospy.Publisher('gyroscope_sensor', msgs.gyroscope, queue_size=10)
+    compass_pub = rospy.Publisher('compass_sensor', msgs.compass, queue_size=10)
+    rospy.init_node('micro_server', anonymous=True)
 
 
 '''

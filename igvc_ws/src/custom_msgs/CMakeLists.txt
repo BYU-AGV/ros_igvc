@@ -46,8 +46,10 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
 add_message_files(
   FILES
   coord.msg
-  accelerometer.msg
+  imu.msg
   gps.msg
+  gyroscope.msg
+  compass.msg
 )
 
 # Generate services in the 'srv' folder

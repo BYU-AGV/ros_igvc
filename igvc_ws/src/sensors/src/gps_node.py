@@ -11,9 +11,6 @@ import rospy
 
 last_gps_data = None
 
-
-last_gps_location = None
-
 '''
     This is the callback for the subscriber, updates the current gps location
 
