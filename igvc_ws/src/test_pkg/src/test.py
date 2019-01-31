@@ -8,7 +8,6 @@ Author: Isaac
 
 import std_msgs.msg as std_msgs
 import custom_msgs.msg as msgs
-# import msg as msgs
 
 import ros_api as ros
 from ros_api import println, is_running, sleep

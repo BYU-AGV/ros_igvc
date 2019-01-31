@@ -2,7 +2,7 @@
 
 '''
 This is a package to abstract communicating with the ros program through python.
-Last edited: 25 Jan 2019
+Last edited: 31 Jan 2019
 Author: Isaac
 '''
 

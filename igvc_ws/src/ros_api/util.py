@@ -2,7 +2,7 @@
 
 '''
 This is a script for basic useful utilities and functions.
-Last edited: 26 Jan 2019
+Last edited: 31 Jan 2019
 Author: Isaac
 '''
 
