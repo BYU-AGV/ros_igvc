@@ -12,8 +12,10 @@ import rospy
 last_gps_data = None
 
 
+last_gps_location = None
+
 '''
-    This is the callback for the subscriber
+    This is the callback for the subscriber, updates the current gps location
 
     args: gps_data - this is the message object from the even
                  is the same type that the subscriber was set up to recieve
@@ -25,7 +27,7 @@ def callback(gps_data):
 
 
 '''
-    This starts up the node, both the subscriber and service
+    This starts up the node, sets up a subscriber for getting last know gps location
 '''
 def start_listening():
     sub = ros.ROS_Subscriber('gps_node', 'gps_location', msgs.gps, callback)
