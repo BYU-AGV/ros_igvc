@@ -50,6 +50,8 @@ add_message_files(
   gps.msg
   gyroscope.msg
   compass.msg
+  velocity.msg
+  imu_distance.msg
 )
 
 # Generate services in the 'srv' folder
