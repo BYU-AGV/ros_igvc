@@ -69,7 +69,7 @@ def accel():
         json_data = json.loads(data)
         imu_data = json_data
         rospy.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + ', duration: ' + str(json_data['duration']) + '}')
-        imu_pub.publish(ros.json_to_msg(request.data, msgs.imu))
+        imu_pub.send(ros.json_to_msg(request.data, msgs.imu))
         return True
     elif request.method == 'GET':
         return jsonify(imu_data)
@@ -98,7 +98,7 @@ def gps():
         rospy.loginfo('/webhook/gps{' + 'latitude: ' +  str(json_data['latitude']) + ', longitude: ' + str(json_data['longitude']) + ', altitude: ' + str(json_data['altitude']) + ', accuracy: ' + str(json_data['accuracy']) + ' speed: ' + str(json_data['speed']) + ', speed_accuracy: ' +  str(json_data['speed_accuracy']) + '}')
         
     if gps_pub is not None:
-        gps_pub.publish(ros.json_to_msg(request.data, msgs.gps))
+        gps_pub.send(ros.json_to_msg(request.data, msgs.gps))
         return True
     else:
         return jsonify(gps_location)
@@ -124,7 +124,7 @@ def gyroscope():
         json_data = json.loads(request.data)
         gyroscope_data = json_data
         rospy.loginfo('/webhook/gyroscope{' + 'x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
-        gyroscope_pub.publish(ros.json_to_msg(request.data, msgs.gyroscope))
+        gyroscope_pub.send(ros.json_to_msg(request.data, msgs.gyroscope))
         return True
     else:
         return jsonify(gyroscope_data)
@@ -149,7 +149,7 @@ def compass():
         json_data = json.loads(request.data)
         compass_data = json_data
         rospy.loginfo('/webhook/compass{' + 'heading: ' + str(json_data['heading']) + '}')
-        compass_pub.publish(ros.json_to_msg(request.data, msgs.compass))
+        compass_pub.send(ros.json_to_msg(request.data, msgs.compass))
         return True
     else:
         return jsonify(compass_data)
@@ -169,11 +169,12 @@ This initializes the ROS node and sets up publishers
 '''
 def start_ros():
     global gps_pub, imu_pub, gyroscope_pub, compass_pub
-    gps_pub = rospy.Publisher('sensor_gps_raw', msgs.gps, queue_size=10)
-    imu_pub = rospy.Publisher('sensor_imu_raw', msgs.imu, queue_size=10)
-    gyroscope_pub = rospy.Publisher('sensor_gyroscope_raw', msgs.gyroscope, queue_size=10)
-    compass_pub = rospy.Publisher('sensor_compass_raw', msgs.compass, queue_size=10)
-    rospy.init_node('micro_server', anonymous=True)
+    ros.init_node('micro_server')
+    gps_pub = ros.Publisher('sensor_gps_raw', msgs.gps)
+    imu_pub = ros.Publisher('sensor_imu_raw', msgs.imu)
+    gyroscope_pub = ros.Publisher('sensor_gyroscope_raw', msgs.gyroscope)
+    compass_pub = ros.Publisher('sensor_compass_raw', msgs.compass)
+
 
 
 '''
