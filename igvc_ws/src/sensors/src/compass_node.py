@@ -18,6 +18,8 @@ compass_data = None # last known compass heading
 
 '''
     Standard callback for the compass subscriber
+
+    args: msg_data - data object of type msgs.compass
 '''
 def callback(msg_data):
     global compass_data

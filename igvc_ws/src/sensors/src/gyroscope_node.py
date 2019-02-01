@@ -19,6 +19,8 @@ gyroscope_data = None # last known gyroscope data
 
 '''
     Standard callback function, records data and prints
+
+    args: msg_data - data object of type msgs.gyroscope
 '''
 def callback(msg_data):
     global gyroscope_data
