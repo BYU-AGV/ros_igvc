@@ -10,6 +10,7 @@
 
 import ros_api as ros
 from ros_api import println
+import rospy
 
 import custom_msgs.msg as msgs
 
@@ -29,6 +30,7 @@ def callback(msg_data):
     Main method, sets up the subscriber
 '''
 if __name__ == '__main__':
-    sub = ros.Subscriber('gyroscope_node', 'gyroscope_sensor', msgs.gyroscope, call=callback)
+    ros.init_node('gyroscope_node')
+    sub = ros.Subscriber('sensor_gyroscope_raw', msgs.gyroscope, call=callback)
     rospy.spin()
 

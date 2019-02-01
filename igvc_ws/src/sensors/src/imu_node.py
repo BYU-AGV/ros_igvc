@@ -63,8 +63,8 @@ def callback(msg_data):
         velocity_x, velocity_y, velocity_z, velocity_magnitude = calculate_velocity(msg_data)
         distance_x, distance_y, distance_z, distance_magnitude = calculate_distance(msg_data)
 
-        velocity_pub.publish(velocity_x, velocity_y, velocity_z, velocity_magnitude)
-        distance_pub.publish(distance_x, distance_y, distance_z, distance_magnitude)
+        velocity_pub.send(velocity_x, velocity_y, velocity_z, velocity_magnitude)
+        distance_pub.send(distance_x, distance_y, distance_z, distance_magnitude)
         println("Velocity: x: " + str(velocity_x) + ', y: ' + str(velocity_y) + ', z: ' + str(velocity_z) + ', mag: ' + str(velocity_magnitude))
         println("Distance: x: " + str(distance_x) + ', y: ' + str(distance_y) + ', z: ' + str(distance_z) + ', mag: ' + str(distance_magnitude))
 
@@ -74,8 +74,8 @@ def callback(msg_data):
     Main function. Sets up everything including the subscribers and publishers
 '''
 if __name__ == '__main__':
-    rospy.init_node('imu_node', anonymous=True)
-    sub = rospy.Subscriber('sensor_imu_raw', msgs.imu, callback)
-    velocity_pub = rospy.Publisher('sesnor_imu_velocity', msgs.velocity, queue_size=10)
-    distance_pub = rospy.Publisher('sesnor_imu_delta_distance', msgs.imu_distance, queue_size=10)
+    ros.init_node('imu_node')
+    sub = ros.Subscriber('sensor_imu_raw', msgs.imu, callback)
+    velocity_pub = ros.Publisher('sesnor_imu_velocity', msgs.velocity)
+    distance_pub = ros.Publisher('sesnor_imu_delta_distance', msgs.imu_distance)
     rospy.spin()

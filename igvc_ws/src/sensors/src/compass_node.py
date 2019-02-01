@@ -9,6 +9,7 @@
 
 import ros_api as ros
 from ros_api import println
+import rospy
 
 import custom_msgs.msg as msgs
 
@@ -27,6 +28,7 @@ def callback(msg_data):
     Main function, starts up subscribers and publishers
 '''
 if __name__ == '__main__':
-    pub = ros.Subscriber('compass_node', 'sensor_compass_raw', msgs.compass, call=callback)
+    ros.init_node('comapss_node')
+    pub = ros.Subscriber('sensor_compass_raw', msgs.compass, call=callback)
     rospy.spin()
 
