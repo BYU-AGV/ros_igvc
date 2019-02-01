@@ -16,8 +16,8 @@ if __name__ == '__main__':
     println('Starting test pkg')
     
     ros.init_node('pub_node')
-    pub1 = ros.ROS_Publisher('test_topic', msgs.coord)
-    pub2 = ros.ROS_Publisher('another_topic', msgs.coord)
+    pub1 = ros.Publisher('test_topic', msgs.coord)
+    pub2 = ros.Publisher('another_topic', msgs.coord)
 
     while is_running():
         # pub1.send(32,10,500)
