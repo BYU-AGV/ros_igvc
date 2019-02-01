@@ -1,20 +1,32 @@
 #!/usr/bin/env python
 
 
+'''
+    Description: Compass node
+    Date Modified: 1 Feb 2019
+    Author: Ben Brenkman
+'''
+
 import ros_api as ros
 from ros_api import println
 
 import custom_msgs.msg as msgs
 
-compass_data = None
+compass_data = None # last known compass heading
 
+
+'''
+    Standard callback for the compass subscriber
+'''
 def callback(msg_data):
     global compass_data
     compass_data = msg_data
     println("Data {}".format(msg_data))
 
-
+'''
+    Main function, starts up subscribers and publishers
+'''
 if __name__ == '__main__':
-    pub = ros.ROS_Subscriber('compass_node', 'compass_sensor', msgs.compass, call=callback)
-    ros.ros_spin()
+    pub = ros.Subscriber('compass_node', 'sensor_compass_raw', msgs.compass, call=callback)
+    rospy.spin()
 

@@ -1,13 +1,20 @@
 #!/usr/bin/env python
 
 
+'''
+    Description: Reads/Subsrcibes imu data, process the data to determine current velocity and delta distance
+    Date Modified: 1 Feb 2019
+    Author: Ben Brenkman
+'''
+
+
 import ros_api as ros
 from ros_api import println
 import rospy
 
 import custom_msgs.msg as msgs
 
-imu_data = None
+imu_data = None # last known imu data in JSON format
 
 velocity_x = 0.0
 velocity_y = 0.0
@@ -33,10 +40,21 @@ def calculate_velocity(data):
 
 
 
+'''
+    Calcuates change in distance i.e. delta distance
+
+    args: data - data of type msgs.imu
+'''
 def calculate_distance(data):
     return data.x * ((data.duration / 1000.0) ** 2.0), data.y * ((data.duration / 1000.0) ** 2.0), data.z * ((data.duration / 1000.0) ** 2.0), ((distance_x ** 2) + (distance_y ** 2) + (distance_z ** 2)) ** (1/2.0)
 
 
+
+'''
+    Standard callback for the subscriber. Calculates velocity and delta distance and stores data. Also publishes data to ROS
+
+    args: msg_data - data object of type msgs.imu
+'''
 def callback(msg_data):
     global imu_data, velocity_x, velocity_y, velocity_z, velocity_magnitude, velocity_pub, distance_pub
     imu_data = msg_data
@@ -52,9 +70,12 @@ def callback(msg_data):
 
 
 
+'''
+    Main function. Sets up everything including the subscribers and publishers
+'''
 if __name__ == '__main__':
     rospy.init_node('imu_node', anonymous=True)
-    sub = rospy.Subscriber('imu_sensor', msgs.imu, callback)
-    velocity_pub = rospy.Publisher('imu_velocity', msgs.velocity, queue_size=10)
-    distance_pub = rospy.Publisher('imu_delta_distance', msgs.imu_distance, queue_size=10)
-    ros.ros_spin()
+    sub = rospy.Subscriber('sensor_imu_raw', msgs.imu, callback)
+    velocity_pub = rospy.Publisher('sesnor_imu_velocity', msgs.velocity, queue_size=10)
+    distance_pub = rospy.Publisher('sesnor_imu_delta_distance', msgs.imu_distance, queue_size=10)
+    rospy.spin()

@@ -92,6 +92,7 @@ POST:
 def gps():
     global gps_location
     if request.method == 'POST':
+        rospy.loginfo("GPS")
         json_data = json.loads(request.data)
         gps_location = json_data
         rospy.loginfo('/webhook/gps{' + 'latitude: ' +  str(json_data['latitude']) + ', longitude: ' + str(json_data['longitude']) + ', altitude: ' + str(json_data['altitude']) + ', accuracy: ' + str(json_data['accuracy']) + ' speed: ' + str(json_data['speed']) + ', speed_accuracy: ' +  str(json_data['speed_accuracy']) + '}')
@@ -168,10 +169,10 @@ This initializes the ROS node and sets up publishers
 '''
 def start_ros():
     global gps_pub, imu_pub, gyroscope_pub, compass_pub
-    gps_pub = rospy.Publisher('gps_sensor', msgs.gps, queue_size=10)
-    imu_pub = rospy.Publisher('imu_sensor', msgs.imu, queue_size=10)
-    gyroscope_pub = rospy.Publisher('gyroscope_sensor', msgs.gyroscope, queue_size=10)
-    compass_pub = rospy.Publisher('compass_sensor', msgs.compass, queue_size=10)
+    gps_pub = rospy.Publisher('sensor_gps_raw', msgs.gps, queue_size=10)
+    imu_pub = rospy.Publisher('sensor_imu_raw', msgs.imu, queue_size=10)
+    gyroscope_pub = rospy.Publisher('sensor_gyroscope_raw', msgs.gyroscope, queue_size=10)
+    compass_pub = rospy.Publisher('sensor_compass_raw', msgs.compass, queue_size=10)
     rospy.init_node('micro_server', anonymous=True)
 
 
