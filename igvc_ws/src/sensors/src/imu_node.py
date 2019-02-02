@@ -35,10 +35,7 @@ distance_pub = None
     args: data - data object of type msgs.imu
 '''
 def calculate_velocity(data):
-    return data.x * (data.duration / 1000.0), 
-           data.y * (data.duration / 1000.0), 
-           data.z * (data.duration / 1000.0), 
-           ((velocity_x ** 2) + (velocity_y ** 2) + (velocity_z ** 2)) ** (1/2.0)
+    return data.x * (data.duration / 1000.0), data.y * (data.duration / 1000.0), data.z * (data.duration / 1000.0), ((velocity_x ** 2) + (velocity_y ** 2) + (velocity_z ** 2)) ** (1/2.0)
 
 
 
@@ -48,10 +45,7 @@ def calculate_velocity(data):
     args: data - data of type msgs.imu
 '''
 def calculate_distance(data):
-    return data.x * ((data.duration / 1000.0) ** 2.0), 
-           data.y * ((data.duration / 1000.0) ** 2.0), 
-           data.z * ((data.duration / 1000.0) ** 2.0), 
-           ((distance_x ** 2) + (distance_y ** 2) + (distance_z ** 2)) ** (1/2.0)
+    return data.x * ((data.duration / 1000.0) ** 2.0), data.y * ((data.duration / 1000.0) ** 2.0), data.z * ((data.duration / 1000.0) ** 2.0), ((distance_x ** 2) + (distance_y ** 2) + (distance_z ** 2)) ** (1/2.0)
 
 
 
