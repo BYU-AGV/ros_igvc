@@ -12,7 +12,6 @@ import struct
 import os
 import json
 
-import rospy
 import ros_api as ros
 from ros_api import println
 

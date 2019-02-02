@@ -7,7 +7,6 @@
 import ros_api as ros
 from ros_api import println
 import custom_msgs.msg as msgs
-import rospy
 
 last_gps_data = None
 
@@ -29,7 +28,7 @@ def callback(gps_data):
 def start_listening():
     ros.init_node('gps_node')
     sub = ros.Subscriber('sensor_gps_raw', msgs.gps, callback)
-    rospy.spin()
+    ros.spin()
 
 
 
