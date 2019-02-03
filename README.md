@@ -1,4 +1,4 @@
-# ros_igvc
+# ros_igvc [![Build Status](https://travis-ci.org/BYU-IGVC/ros_igvc.svg?branch=master)](https://travis-ci.org/BYU-IGVC/ros_igvc)
 This is our main repository for our robot using the Robot Operating System. Visit our wiki to learn more about the strucure of the project and how to contribute. You can also go through the steps below to get started.
 
 # Getting started
