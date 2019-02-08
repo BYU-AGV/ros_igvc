@@ -20,12 +20,19 @@ import sys
 g_map = None
 
 def exit_nicely(signal, frame):
+    ''' This is a callback function to try and make it exit without a bunch of errors when pressing Ctrl-C '''
+
     close()
     println()
     println('exiting...')
     sys.exit(0)
 
 def callback(msg):
+    ''' Callback function when data is received from the gps topic
+
+        Args:   msg - the data in message format from the topic
+    '''
+
     global g_map
 
     data = ros.msg_to_dict(msg)
