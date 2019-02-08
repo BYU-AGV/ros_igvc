@@ -2,7 +2,7 @@
 
 '''
 Description: This is a script for visualizing the global map
-Last Modified: 7 Feb 2019
+Last Modified: 8 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -24,6 +24,7 @@ def display_graph(g_map):
     try: plt.pause(0.05)
     except Exception: pass
 
+    plt.cla()
     plt.title('Global Map')
 
     x,y,s,arrows = g_map.get_scatter_data()
