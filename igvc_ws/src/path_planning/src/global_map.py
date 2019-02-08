@@ -23,9 +23,8 @@ class Map(object):
         self.last_node = Node(lat, lon, None)
         self.nodes.append(self.last_node)
 
-    def add_node(self, latitude, longitude, parent=None):
-        parent = self.last_node if parent == None else parent
-        node = Node(latitude, longitude, parent)
+    def add_node(self, latitude, longitude):
+        node = Node(latitude, longitude, self.last_node)
         self.nodes.append(node)
         self.last_node = node
 
