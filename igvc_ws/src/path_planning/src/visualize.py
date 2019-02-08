@@ -12,7 +12,12 @@ import custom_msgs.msg as msgs
 import ros_api as ros
 from ros_api import println
 
-def dispay_graph(g_map):
+import matplotlib.pyplot as plt
+import numpy as np
+
+def display_graph(g_map):
+    plt.title('Global Map')
+    plt.show()
     pass
 
 if __name__ == '__main__':
