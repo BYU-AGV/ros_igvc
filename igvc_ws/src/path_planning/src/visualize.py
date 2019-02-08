@@ -26,8 +26,11 @@ def display_graph(g_map):
 
     plt.cla()
     plt.title('Global Map')
+    plt.gca().set_aspect('equal')
 
     x,y,s,arrows = g_map.get_scatter_data()
+
+    println(max(s), min(s))
 
     # cm = plt.cm.get_cmap('Blues')
     c = np.linspace(0, 1, len(x))

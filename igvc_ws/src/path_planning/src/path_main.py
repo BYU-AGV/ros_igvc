@@ -54,6 +54,7 @@ if __name__ == '__main__':
     try: ros.spin()
     except RuntimeError: pass
 
-    if g_map != None:
-        g_map.pickle('test_map.pkl')
+    # Uncomment this if you want to save the map 
+    # if g_map != None:
+        # g_map.pickle('src/path_planning/src/test_map.pkl')
 

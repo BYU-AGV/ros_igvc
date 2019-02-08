@@ -103,7 +103,7 @@ class Map(object):
 
             x[i] = x_
             y[i] = y_
-            s[i] = 3.14*r*r
+            s[i] = r
 
             for p in n.get_parents():
                 if p == None: continue
@@ -114,6 +114,6 @@ class Map(object):
 
     def get_last_point_scatter(self):
         r = self.last_node.get_radius()
-        return [self.last_node.get_latitude()],[self.last_node.get_longitude()],3.14*r*r
+        return [self.last_node.get_latitude()],[self.last_node.get_longitude()],r
 
 
