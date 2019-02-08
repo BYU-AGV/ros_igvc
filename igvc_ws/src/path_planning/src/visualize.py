@@ -16,6 +16,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def display_graph(g_map):
+    ''' This function displays a global map object continuously
+
+        Args:   g_map - a Map object
+    '''
+
     try: plt.pause(0.05)
     except Exception: pass
 
@@ -32,12 +37,18 @@ def display_graph(g_map):
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
 
 def show():
+    ''' Wrapper for matplotlib plt.show() '''
+
     plt.ion()
     plt.show()
 
 def close():
+    ''' Wrapper for matplotlib plt.close() '''
+
     plt.close()
 
 if __name__ == '__main__':
+    ''' If this is called from main, nothing should happen '''
+
     pass
 
