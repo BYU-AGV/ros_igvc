@@ -2,7 +2,7 @@
 
 '''
 Description: This is a class to represent a 2-d map (top down) of known traversible space
-Last Modified: 7 Feb 2019
+Last Modified: 8 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -81,9 +81,9 @@ class Map(object):
     def get_scatter_data(self):
         ''' Returns nodes in a data format for a scatter plot '''
 
-        x = np.zeros(len(self.nodes))
-        y = np.zeros(len(self.nodes))
-        s = np.zeros(len(self.nodes))
+        x = np.zeros(len(self.nodes) + 1)
+        y = np.zeros(len(self.nodes) + 1)
+        s = np.zeros(len(self.nodes) + 1)
 
         arrows = []
         for i,n in enumerate(self.nodes):
@@ -100,6 +100,9 @@ class Map(object):
 
                 arrows.append(((x_,y_),(p.get_latitude(),p.get_longitude())))
 
-        return x,y,s,arrows
+        x[len(x)-1] = self.last_node.get_latitude()
+        y[len(y)-1] = self.last_node.get_longitude()
+        s[len(s)-1] = self.last_node.get_radius()
 
+        return x,y,s,arrows
 
