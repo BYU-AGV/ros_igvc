@@ -18,9 +18,16 @@ if __name__ == '__main__':
     ros.init_node('fake_gps')
     pub = ros.Publisher('test_gps', msgs.gps)
 
+    lat = random.random()*100
+    lon = random.random()*100
+
     while ros.is_running():
-        lat = random.random()*10
-        lon = random.random()*10
+        n_lat = random.random()*10
+        n_lon = random.random()*10
+
+        lat = random.choice((lat+n_lat,lat-n_lat))
+        lon = random.choice((lon+n_lon,lon-n_lon))
+
         pub.send(   latitude=lat, \
                     longitude=lon, \
                     altitude=0, \

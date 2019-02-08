@@ -16,11 +16,10 @@ import numpy as np
 from node import Node
 
 class Map(object):
-    def __init__(self, current_pos):
+    def __init__(self, latitude, longitude):
         self.nodes = []
 
-        lat,lon = current_pos
-        self.last_node = Node(lat, lon, None)
+        self.last_node = Node(latitude, longitude, None)
         self.nodes.append(self.last_node)
 
     def add_node(self, latitude, longitude):
