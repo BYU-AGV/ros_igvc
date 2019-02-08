@@ -18,12 +18,30 @@ import math
 
 class Map(object):
     def __init__(self, latitude, longitude, radius):
+        ''' Constructor for a Map object
+
+            Args:   latitude - the gps latitude for the initial node
+                    longitude - the gps longitude for the initial node
+                    radius - the gps accuracy for the initial node
+
+            Returns:    a Map object
+        '''
+
         self.nodes = []
 
         self.last_node = Node(latitude, longitude, radius, None)
         self.nodes.append(self.last_node)
 
     def add_node(self, latitude, longitude, radius):
+        ''' Adds a node if that space hasn't already been added
+
+            Args:   latitude - the gps latitude location
+                    longitude - the gps longitude location
+                    radius - the gps accuracy
+
+            Returns:    a Node object. This will either be a new node or one already traversed
+        '''
+
         node = self.location_within_node(latitude, longitude)
         if node == None:
             node = Node(latitude, longitude, radius, self.last_node)
@@ -33,6 +51,14 @@ class Map(object):
         return node
 
     def location_within_node(self, latitude, longitude):
+        ''' Checks whether a location already has a node with that location
+
+            Args:   latitude - the gps latitude location
+                    longitude - the gps longitude location
+
+            Returns:    the Node at that location, None if one does not exist
+        '''
+
         for n in self.nodes:
             if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= n.get_radius():
                 n.add_parent(self.last_node)
@@ -40,9 +66,21 @@ class Map(object):
         return None
 
     def eculid_dist(self, x1, y1, x2, y2):
+        ''' Returns the eculidean distance between two points
+
+            Args:   x1 - point 1's x position
+                    y1 - point 1's y position
+                    x2 - point 2's x position
+                    y2 - point 2's y position
+
+            Returns:    A double representing the distance between points
+        '''
+
         return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 
     def get_scatter_data(self):
+        ''' Returns nodes in a data format for a scatter plot '''
+
         x = np.zeros(len(self.nodes))
         y = np.zeros(len(self.nodes))
         s = np.zeros(len(self.nodes))
