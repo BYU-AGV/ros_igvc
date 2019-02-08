@@ -16,6 +16,8 @@ from global_map import Map
 from visualize import display_graph, show
 
 if __name__ == '__main__':
+    ros.init_node('pathing_node')
+    sub = ros.Subscriber('test_gps', msgs.gps)
     g_map = Map((14, 12))
     node = g_map.add_node(13,11)
     g_map.add_node(9,3)
