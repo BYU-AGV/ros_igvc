@@ -35,7 +35,7 @@ def callback(msg):
     else:
         g_map.add_node(data['latitude'],data['longitude'],data['accuracy'])
 
-    display_graph(g_map)
+    # display_graph(g_map)
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit_nicely)
