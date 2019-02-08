@@ -12,13 +12,15 @@ import custom_msgs.msg as msgs
 import ros_api as ros
 from ros_api import println
 
+import random
+
 if __name__ == '__main__':
     ros.init_node('fake_gps')
     pub = ros.Publisher('test_gps', msgs.gps)
 
     while ros.is_running():
-        lat = 10
-        lon = 15
+        lat = random.random()*10
+        lon = random.random()*10
         pub.send(   latitude=lat, \
                     longitude=lon, \
                     altitude=0, \
