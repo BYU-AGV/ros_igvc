@@ -22,8 +22,8 @@ if __name__ == '__main__':
     lon = random.random()*10
 
     while ros.is_running():
-        n_lat = random.random()/2
-        n_lon = random.random()/2
+        n_lat = random.random()*10
+        n_lon = random.random()*10
 
         lat = random.choice((lat+n_lat,lat-n_lat))
         lon = random.choice((lon+n_lon,lon-n_lon))
@@ -37,5 +37,5 @@ if __name__ == '__main__':
                     speed_accuracy=0
                 )
 
-        ros.sleep(.1)
+        ros.sleep(1)
         

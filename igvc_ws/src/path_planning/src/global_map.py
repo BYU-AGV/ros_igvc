@@ -14,6 +14,7 @@ from ros_api import println
 
 import numpy as np
 from node import Node
+import math
 
 class Map(object):
     def __init__(self, latitude, longitude, radius):
@@ -23,11 +24,24 @@ class Map(object):
         self.nodes.append(self.last_node)
 
     def add_node(self, latitude, longitude, radius):
-        node = Node(latitude, longitude, radius, self.last_node)
-        self.nodes.append(node)
-        self.last_node = node
+        node = self.location_within_node(latitude, longitude)
+        if node == None:
+            node = Node(latitude, longitude, radius, self.last_node)
+            self.nodes.append(node)
 
+        self.last_node = node
         return node
+
+    def location_within_node(self, latitude, longitude):
+        for n in self.nodes:
+            if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= n.get_radius():
+                println('within space')
+                n.add_parent(self.last_node)
+                return n
+        return None
+
+    def eculid_dist(self, x1, y1, x2, y2):
+        return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 
     def get_scatter_data(self):
         x = np.zeros(len(self.nodes))
