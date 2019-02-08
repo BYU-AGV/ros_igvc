@@ -15,6 +15,7 @@ from ros_api import println
 import numpy as np
 from node import Node
 import math
+import pickle as pk
 
 class Map(object):
     def __init__(self, latitude, longitude, radius):
@@ -77,6 +78,15 @@ class Map(object):
         '''
 
         return math.sqrt((x2-x1)**2 + (y2-y1)**2)
+
+    def pickle(self, path):
+        ''' Saves the current Map as a pickled file
+
+            Args:   path - the file path and name to save
+        '''
+
+        with open(path, 'w') as f:
+            pk.dump(self, f)
 
     def get_scatter_data(self):
         ''' Returns nodes in a data format for a scatter plot '''

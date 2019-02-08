@@ -2,7 +2,7 @@
 
 '''
 Description: This is the main class to call for path navigation
-Last Modified: 7 Feb 2019
+Last Modified: 8 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -53,4 +53,7 @@ if __name__ == '__main__':
 
     try: ros.spin()
     except RuntimeError: pass
+
+    if g_map != None:
+        g_map.pickle('test_map.pkl')
 
