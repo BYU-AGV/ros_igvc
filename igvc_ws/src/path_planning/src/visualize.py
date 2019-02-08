@@ -23,11 +23,13 @@ def display_graph(g_map):
 
     x,y,s,arrows = g_map.get_scatter_data()
 
-    plt.scatter(x,y, s=s, color='blue')
+    cm = plt.cm.get_cmap('Blues')
+    c = np.linspace(0, 1, len(x))
+
+    plt.scatter(x,y, s=s, c=c, cmap=cm)
 
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
-        # plt.arrow(*a, width=.002, head_width=.55, color='black')
 
 def show():
     plt.ion()
