@@ -12,9 +12,21 @@ import custom_msgs.msg as msgs
 import ros_api as ros
 from ros_api import println
 
+from node import Node
+
 class Map(object):
-    def __init__(self, width=100, height=100, scale=1):
-        self.width = width
-        self.height = height
-        self.scale = 1
+    def __init__(self, current_pos):
+        self.nodes = []
+
+        lat,lon = current_pos
+        self.last_node = Node(lat, lon, None)
+        self.nodes.append(self.last_node)
+
+    def add_node(self, latitude, longitude):
+        node = Node(latitude, longitude, self.last_node)
+        self.nodes.append(node)
+        self.last_node = node
+
+
+
 
