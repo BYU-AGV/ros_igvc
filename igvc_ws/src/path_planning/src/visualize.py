@@ -29,10 +29,10 @@ def display_graph(g_map):
 
     x,y,s,arrows = g_map.get_scatter_data()
 
-    cm = plt.cm.get_cmap('Blues')
+    # cm = plt.cm.get_cmap('Blues')
     c = np.linspace(0, 1, len(x))
 
-    plt.scatter(x,y, s=s, c=c, cmap=cm)
+    plt.scatter(x,y, s=s, c=c)
 
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
