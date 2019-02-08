@@ -28,6 +28,7 @@ def display_graph(g_map):
         # plt.arrow(*a, width=.002, head_width=.55, color='black')
 
 
+def show():
     plt.show()
 
 if __name__ == '__main__':

@@ -13,7 +13,7 @@ import ros_api as ros
 from ros_api import println
 
 from global_map import Map
-from visualize import display_graph
+from visualize import display_graph, show
 
 if __name__ == '__main__':
     g_map = Map((14, 12))
@@ -22,3 +22,5 @@ if __name__ == '__main__':
     g_map.add_node(1,3)
 
     display_graph(g_map)
+    show()
+    
