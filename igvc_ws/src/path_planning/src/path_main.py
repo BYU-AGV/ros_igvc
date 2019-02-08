@@ -17,5 +17,8 @@ from visualize import display_graph
 
 if __name__ == '__main__':
     g_map = Map((14, 12))
-    g_map.add_node(13,11)
+    node = g_map.add_node(13,11)
+    g_map.add_node(9,3,node)
+    g_map.add_node(1,3,node)
+
     display_graph(g_map)

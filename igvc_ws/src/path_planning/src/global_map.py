@@ -23,10 +23,13 @@ class Map(object):
         self.last_node = Node(lat, lon, None)
         self.nodes.append(self.last_node)
 
-    def add_node(self, latitude, longitude):
-        node = Node(latitude, longitude, self.last_node)
+    def add_node(self, latitude, longitude, parent=None):
+        parent = self.last_node if parent == None else parent
+        node = Node(latitude, longitude, parent)
         self.nodes.append(node)
         self.last_node = node
+
+        return node
 
     def get_scatter_data(self):
         x = np.zeros(len(self.nodes))
@@ -43,7 +46,7 @@ class Map(object):
             for p in n.get_parents():
                 if p == None: continue
 
-                arrows.append((x_,y_,(p.get_latitude()-x_),(p.get_longitude()-y_)))
+                arrows.append(((x_,y_),(p.get_latitude(),p.get_longitude())))
 
         return x,y,arrows
 

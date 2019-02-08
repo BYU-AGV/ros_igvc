@@ -20,8 +20,13 @@ def display_graph(g_map):
     x,y,arrows = g_map.get_scatter_data()
     plt.scatter(x,y)
 
-    for a in arrows:
-        plt.arrow(*a, width=.002, head_width=.01, color='black')
+    println(plt.gca().get_ylim())
+
+
+    for (a,b) in arrows:
+        plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
+        # plt.arrow(*a, width=.002, head_width=.55, color='black')
+
 
     plt.show()
 
