@@ -32,3 +32,6 @@ class Node(object):
     def get_longitude(self):
         return self.lon
 
+    def get_parents(self):
+        return self.parents
+

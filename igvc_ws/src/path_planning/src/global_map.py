@@ -32,10 +32,19 @@ class Map(object):
         x = np.zeros(len(self.nodes))
         y = np.zeros(len(self.nodes))
 
+        arrows = []
         for i,n in enumerate(self.nodes):
-            x[i] = n.get_latitude()
-            y[i] = n.get_longitude()
+            x_ = n.get_latitude()
+            y_ = n.get_longitude()
 
-        return x,y
+            x[i] = x_
+            y[i] = y_
+
+            for p in n.get_parents():
+                if p == None: continue
+
+                arrows.append((x_,y_,(p.get_latitude()-x_),(p.get_longitude()-y_)))
+
+        return x,y,arrows
 
 

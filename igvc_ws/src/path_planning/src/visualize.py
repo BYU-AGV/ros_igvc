@@ -17,10 +17,13 @@ import numpy as np
 
 def display_graph(g_map):
     plt.title('Global Map')
-    x,y = g_map.get_scatter_data()
+    x,y,arrows = g_map.get_scatter_data()
     plt.scatter(x,y)
+
+    for a in arrows:
+        plt.arrow(*a, width=.002, head_width=.01, color='black')
+
     plt.show()
-    pass
 
 if __name__ == '__main__':
     pass
