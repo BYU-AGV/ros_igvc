@@ -17,6 +17,8 @@ import numpy as np
 
 def display_graph(g_map):
     plt.title('Global Map')
+    x,y = g_map.get_scatter_data()
+    plt.scatter(x,y)
     plt.show()
     pass
 

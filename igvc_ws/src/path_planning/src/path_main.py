@@ -17,4 +17,4 @@ from visualize import display_graph
 
 if __name__ == '__main__':
     g_map = Map((14, 12))
-    display_graph(None)
+    display_graph(g_map)

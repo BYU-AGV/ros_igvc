@@ -12,6 +12,7 @@ import custom_msgs.msg as msgs
 import ros_api as ros
 from ros_api import println
 
+import numpy as np
 from node import Node
 
 class Map(object):
@@ -27,6 +28,14 @@ class Map(object):
         self.nodes.append(node)
         self.last_node = node
 
+    def get_scatter_data(self):
+        x = np.zeros(len(self.nodes))
+        y = np.zeros(len(self.nodes))
 
+        for i,n in enumerate(self.nodes):
+            x[i] = n.get_latitude()
+            y[i] = n.get_longitude()
+
+        return x,y
 
 

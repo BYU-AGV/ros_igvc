@@ -21,3 +21,14 @@ class Node(object):
             raise TypeError('Unable to create a node with a non-node parent')
         self.parents = [parent]
 
+    def __repr__(self):
+        return __str__()
+    def __str__(self):
+        return 'Node: ({},{}) Parents: {}'.format(self.lat, self.lon, len(self.parents))
+
+    def get_latitude(self):
+        return self.lat
+
+    def get_longitude(self):
+        return self.lon
+
