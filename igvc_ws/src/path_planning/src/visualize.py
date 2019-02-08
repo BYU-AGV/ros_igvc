@@ -21,16 +21,20 @@ def display_graph(g_map):
 
     plt.title('Global Map')
 
-    x,y,arrows = g_map.get_scatter_data()
+    x,y,s,arrows = g_map.get_scatter_data()
 
-    plt.scatter(x,y, s=50, color='blue')
+    plt.scatter(x,y, s=s, color='blue')
 
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
         # plt.arrow(*a, width=.002, head_width=.55, color='black')
 
 def show():
+    plt.ion()
     plt.show()
+
+def close():
+    plt.close()
 
 if __name__ == '__main__':
     pass

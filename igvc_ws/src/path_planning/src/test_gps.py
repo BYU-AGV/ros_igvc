@@ -22,16 +22,17 @@ if __name__ == '__main__':
     lon = random.random()*100
 
     while ros.is_running():
-        n_lat = random.random()*10
-        n_lon = random.random()*10
+        n_lat = random.random()
+        n_lon = random.random()
 
         lat = random.choice((lat+n_lat,lat-n_lat))
         lon = random.choice((lon+n_lon,lon-n_lon))
+        acc = random.random()*5 + 1
 
         pub.send(   latitude=lat, \
                     longitude=lon, \
                     altitude=0, \
-                    accuracy=0, \
+                    accuracy=acc, \
                     speed=0, \
                     speed_accuracy=0
                 )

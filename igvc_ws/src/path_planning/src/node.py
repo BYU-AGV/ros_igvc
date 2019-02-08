@@ -13,9 +13,10 @@ import ros_api as ros
 from ros_api import println
 
 class Node(object):
-    def __init__(self, latitude, longitude, parent):
+    def __init__(self, latitude, longitude, radius, parent):
         self.lat = latitude
         self.lon = longitude
+        self.r = radius
 
         if type(parent) != type(self) and parent != None:
             raise TypeError('Unable to create a node with a non-node parent')
@@ -34,4 +35,7 @@ class Node(object):
 
     def get_parents(self):
         return self.parents
+
+    def get_radius(self):
+        return self.r
 

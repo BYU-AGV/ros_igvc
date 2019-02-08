@@ -16,14 +16,14 @@ import numpy as np
 from node import Node
 
 class Map(object):
-    def __init__(self, latitude, longitude):
+    def __init__(self, latitude, longitude, radius):
         self.nodes = []
 
-        self.last_node = Node(latitude, longitude, None)
+        self.last_node = Node(latitude, longitude, radius, None)
         self.nodes.append(self.last_node)
 
-    def add_node(self, latitude, longitude):
-        node = Node(latitude, longitude, self.last_node)
+    def add_node(self, latitude, longitude, radius):
+        node = Node(latitude, longitude, radius, self.last_node)
         self.nodes.append(node)
         self.last_node = node
 
@@ -32,20 +32,23 @@ class Map(object):
     def get_scatter_data(self):
         x = np.zeros(len(self.nodes))
         y = np.zeros(len(self.nodes))
+        s = np.zeros(len(self.nodes))
 
         arrows = []
         for i,n in enumerate(self.nodes):
             x_ = n.get_latitude()
             y_ = n.get_longitude()
+            r = n.get_radius()
 
             x[i] = x_
             y[i] = y_
+            s[i] = 3.14*r*r
 
             for p in n.get_parents():
                 if p == None: continue
 
                 arrows.append(((x_,y_),(p.get_latitude(),p.get_longitude())))
 
-        return x,y,arrows
+        return x,y,s,arrows
 
 
