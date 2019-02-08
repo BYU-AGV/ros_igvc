@@ -15,9 +15,15 @@ from ros_api import println
 from global_map import Map
 from visualize import display_graph, show
 
+def callback(msg):
+    data = ros.msg_to_dict(msg)
+    g_map.add_node(data['latitude'],data['longitude'])
+    display_graph(g_map)
+
 if __name__ == '__main__':
     ros.init_node('pathing_node')
-    sub = ros.Subscriber('test_gps', msgs.gps)
+    sub = ros.Subscriber('test_gps', msgs.gps, call=callback)
+
     g_map = Map((14, 12))
     node = g_map.add_node(13,11)
     g_map.add_node(9,3)

@@ -16,12 +16,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def display_graph(g_map):
+    plt.pause(0.05)
     plt.title('Global Map')
     x,y,arrows = g_map.get_scatter_data()
-    plt.scatter(x,y)
-
-    println(plt.gca().get_ylim())
-
+    plt.scatter(x,y, color='blue')
 
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
