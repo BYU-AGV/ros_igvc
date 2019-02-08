@@ -81,9 +81,9 @@ class Map(object):
     def get_scatter_data(self):
         ''' Returns nodes in a data format for a scatter plot '''
 
-        x = np.zeros(len(self.nodes) + 1)
-        y = np.zeros(len(self.nodes) + 1)
-        s = np.zeros(len(self.nodes) + 1)
+        x = np.zeros(len(self.nodes))
+        y = np.zeros(len(self.nodes))
+        s = np.zeros(len(self.nodes))
 
         arrows = []
         for i,n in enumerate(self.nodes):
@@ -100,9 +100,10 @@ class Map(object):
 
                 arrows.append(((x_,y_),(p.get_latitude(),p.get_longitude())))
 
-        x[len(x)-1] = self.last_node.get_latitude()
-        y[len(y)-1] = self.last_node.get_longitude()
-        s[len(s)-1] = self.last_node.get_radius()
-
         return x,y,s,arrows
+
+    def get_last_point_scatter(self):
+        r = self.last_node.get_radius()
+        return [self.last_node.get_latitude()],[self.last_node.get_longitude()],3.14*r*r
+
 
