@@ -32,7 +32,8 @@ class Node(object):
         return 'Node: ({},{}) Parents: {}'.format(self.lat, self.lon, len(self.parents))
 
     def add_parent(self, parent):
-        self.parents.append(parent)
+        if parent not in self.parents:
+            self.parents.append(parent)
 
     def get_latitude(self):
         return self.lat

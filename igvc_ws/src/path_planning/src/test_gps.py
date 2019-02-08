@@ -37,5 +37,5 @@ if __name__ == '__main__':
                     speed_accuracy=0
                 )
 
-        ros.sleep(1)
+        ros.sleep(.1)
         

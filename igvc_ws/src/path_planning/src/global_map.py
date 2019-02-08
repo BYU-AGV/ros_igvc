@@ -35,7 +35,6 @@ class Map(object):
     def location_within_node(self, latitude, longitude):
         for n in self.nodes:
             if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= n.get_radius():
-                println('within space')
                 n.add_parent(self.last_node)
                 return n
         return None
