@@ -60,8 +60,6 @@ class Map(object):
             Returns:    the Node at that location, None if one does not exist
         '''
 
-        return None # REMOVE HERE
-
         for n in self.nodes:
             if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()):
                 n.add_parent(self.last_node)
