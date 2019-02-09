@@ -23,7 +23,7 @@ class Map(object):
 
             Args:   latitude - the gps latitude for the initial node
                     longitude - the gps longitude for the initial node
-                    radius - the gps accuracy for the initial node
+                    radius - the gps accuracy for the initial node in meters
 
             Returns:    a Map object
         '''
@@ -38,7 +38,7 @@ class Map(object):
 
             Args:   latitude - the gps latitude location
                     longitude - the gps longitude location
-                    radius - the gps accuracy
+                    radius - the gps accuracy in meters
 
             Returns:    a Node object. This will either be a new node or one already traversed
         '''
@@ -79,6 +79,19 @@ class Map(object):
 
         return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 
+    def eculid_dist_squared(self, x1, y1, x2, y2):
+        ''' Returns the eculidean distance between two points
+
+            Args:   x1 - point 1's x position
+                    y1 - point 1's y position
+                    x2 - point 2's x position
+                    y2 - point 2's y position
+
+            Returns:    A double representing the distance between points
+        '''
+
+        return (x2-x1)**2 + (y2-y1)**2
+
     def pickle(self, path):
         ''' Saves the current Map as a pickled file
 
@@ -103,7 +116,7 @@ class Map(object):
 
             x[i] = x_
             y[i] = y_
-            s[i] = r
+            s[i] = math.pi * self.meters_to_gps_radius_squared(x_, y_ , r)
 
             for p in n.get_parents():
                 if p == None: continue
@@ -113,7 +126,36 @@ class Map(object):
         return x,y,s,arrows
 
     def get_last_point_scatter(self):
+        x_ = self.last_node.get_latitude()
+        y_ = self.last_node.get_longitude()
         r = self.last_node.get_radius()
-        return [self.last_node.get_latitude()],[self.last_node.get_longitude()],r
+        return x_,y_, math.pi * self.meters_to_gps_radius_squared(x_, y_, r)
 
+    def meters_to_gps_radius_squared(self, lat, lon, m):
+        # Earth's radius, sphere
+        R = 6378137
 
+        # Coordinate offsets in radians
+        dLat = m/R
+        dLon = m/(R*math.cos(math.pi*lat/180))
+
+        # OffsetPosition, decimal degrees
+        latO = lat + dLat * 180/math.pi
+        lonO = lon + dLon * 180/math.pi
+        
+        return self.eculid_dist_squared(lat,lon,latO,lonO)
+
+    def meters_to_gps_radius(self, lat, lon, m):
+        # Earth's radius, sphere
+        R = 6378137
+
+        # Coordinate offsets in radians
+        dLat = m/R
+        dLon = m/(R*math.cos(math.pi*lat/180))
+
+        # OffsetPosition, decimal degrees
+        latO = lat + dLat * 180/math.pi
+        lonO = lon + dLon * 180/math.pi
+        
+        return self.eculid_dist(lat,lon,latO,lonO)
+        

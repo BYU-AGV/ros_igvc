@@ -30,18 +30,20 @@ def display_graph(g_map):
 
     x,y,s,arrows = g_map.get_scatter_data()
 
-    println(max(s), min(s))
-
     # cm = plt.cm.get_cmap('Blues')
     c = np.linspace(0, 1, len(x))
 
-    plt.scatter(x,y, s=s, c=c)
+    plt.scatter(x,y, s=scale_up(s), c=c)
     
     px,py,ps = g_map.get_last_point_scatter()
-    plt.scatter(px,py, s=ps, color='red')
+    plt.scatter(px,py, s=scale_up(ps), color='red')
 
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
+
+def scale_up(obj, scale=5000000000):
+    try: return map(lambda x : x*scale, obj)
+    except TypeError: return obj*scale
 
 def show():
     ''' Wrapper for matplotlib plt.show() '''
