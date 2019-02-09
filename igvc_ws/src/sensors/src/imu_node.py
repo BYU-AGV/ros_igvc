@@ -74,7 +74,7 @@ def callback(msg_data):
 '''
 if __name__ == '__main__':
     ros.init_node('imu_node')
-    sub = ros.Subscriber('sensor_imu_raw', msgs.imu, callback)
+    sub = ros.Subscriber('imu_sensor_raw', msgs.imu, callback)
     velocity_pub = ros.Publisher('sesnor_imu_velocity', msgs.velocity)
     distance_pub = ros.Publisher('sesnor_imu_delta_distance', msgs.imu_distance)
     ros.spin()

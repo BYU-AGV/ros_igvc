@@ -67,8 +67,8 @@ def accel():
         data = request.data
         json_data = json.loads(data)
         imu_data = json_data
-        rospy.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + ', duration: ' + str(json_data['duration']) + '}')
-        imu_pub.send(ros.json_to_msg(request.data, msgs.imu))
+        #ros.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + ', duration: ' + str(json_data['duration']) + '}')
+        #imu_pub.send(ros.json_to_msg(request.data, msgs.imu))
         return True
     elif request.method == 'GET':
         return jsonify(imu_data)
@@ -91,12 +91,9 @@ POST:
 def gps():
     global gps_location
     if request.method == 'POST':
-        rospy.loginfo("GPS")
         json_data = json.loads(request.data)
         gps_location = json_data
-        rospy.loginfo('/webhook/gps{' + 'latitude: ' +  str(json_data['latitude']) + ', longitude: ' + str(json_data['longitude']) + ', altitude: ' + str(json_data['altitude']) + ', accuracy: ' + str(json_data['accuracy']) + ' speed: ' + str(json_data['speed']) + ', speed_accuracy: ' +  str(json_data['speed_accuracy']) + '}')
-        
-    if gps_pub is not None:
+        ros.loginfo('/webhook/gps{' + 'latitude: ' +  str(json_data['latitude']) + ', longitude: ' + str(json_data['longitude']) + ', altitude: ' + str(json_data['altitude']) + ', accuracy: ' + str(json_data['accuracy']) + ' speed: ' + str(json_data['speed']) + ', speed_accuracy: ' +  str(json_data['speed_accuracy']) + '}')
         gps_pub.send(ros.json_to_msg(request.data, msgs.gps))
         return True
     else:
@@ -122,8 +119,8 @@ def gyroscope():
     if request.method == 'POST':
         json_data = json.loads(request.data)
         gyroscope_data = json_data
-        rospy.loginfo('/webhook/gyroscope{' + 'x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
-        gyroscope_pub.send(ros.json_to_msg(request.data, msgs.gyroscope))
+        #ros.loginfo('/webhook/gyroscope{' + 'x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
+        #gyroscope_pub.send(ros.json_to_msg(request.data, msgs.gyroscope))
         return True
     else:
         return jsonify(gyroscope_data)
@@ -147,8 +144,8 @@ def compass():
     if request.method == 'POST':
         json_data = json.loads(request.data)
         compass_data = json_data
-        rospy.loginfo('/webhook/compass{' + 'heading: ' + str(json_data['heading']) + '}')
-        compass_pub.send(ros.json_to_msg(request.data, msgs.compass))
+        #ros.loginfo('/webhook/compass{' + 'heading: ' + str(json_data['heading']) + '}')
+        #compass_pub.send(ros.json_to_msg(request.data, msgs.compass))
         return True
     else:
         return jsonify(compass_data)
@@ -160,6 +157,7 @@ JSON string with status as success. Only GET method allowed
 '''
 @app.route('/ping')
 def ping():
+    ros.loginfo("Pinged")
     return True
 
 
@@ -169,10 +167,10 @@ This initializes the ROS node and sets up publishers
 def start_ros():
     global gps_pub, imu_pub, gyroscope_pub, compass_pub
     ros.init_node('micro_server')
-    gps_pub = ros.Publisher('sensor_gps_raw', msgs.gps)
-    imu_pub = ros.Publisher('sensor_imu_raw', msgs.imu)
-    gyroscope_pub = ros.Publisher('sensor_gyroscope_raw', msgs.gyroscope)
-    compass_pub = ros.Publisher('sensor_compass_raw', msgs.compass)
+    gps_pub = ros.Publisher('gps_sensor_raw', msgs.gps)
+    imu_pub = ros.Publisher('imu_sensor_imu_raw', msgs.imu)
+    gyroscope_pub = ros.Publisher('gyroscope_sensor_raw', msgs.gyroscope)
+    compass_pub = ros.Publisher('compass_sensor_raw', msgs.compass)
 
 
 
