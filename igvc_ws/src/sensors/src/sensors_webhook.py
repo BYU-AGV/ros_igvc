@@ -2,7 +2,7 @@
 
 '''
 Discription: ROS node that recieves sensor information via a micro server
-Last Modified: 30 Jan 2019
+Last Modified: 8 Feb 2019
 Author: Ben Brenkman
 '''
 
@@ -67,8 +67,8 @@ def accel():
         data = request.data
         json_data = json.loads(data)
         imu_data = json_data
-        #ros.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + ', duration: ' + str(json_data['duration']) + '}')
-        #imu_pub.send(ros.json_to_msg(request.data, msgs.imu))
+        ros.loginfo('/webhook/accelerometer{' +  'type: ' + str(json_data['type']) + ', x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + ', duration: ' + str(json_data['duration']) + '}')
+        imu_pub.send(ros.json_to_msg(request.data, msgs.imu))
         return True
     elif request.method == 'GET':
         return jsonify(imu_data)
@@ -119,8 +119,8 @@ def gyroscope():
     if request.method == 'POST':
         json_data = json.loads(request.data)
         gyroscope_data = json_data
-        #ros.loginfo('/webhook/gyroscope{' + 'x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
-        #gyroscope_pub.send(ros.json_to_msg(request.data, msgs.gyroscope))
+        ros.loginfo('/webhook/gyroscope{' + 'x: ' + str(json_data['x']) + ', y: ' + str(json_data['y']) + ', z: ' + str(json_data['z']) + '}')
+        gyroscope_pub.send(ros.json_to_msg(request.data, msgs.gyroscope))
         return True
     else:
         return jsonify(gyroscope_data)
@@ -144,8 +144,8 @@ def compass():
     if request.method == 'POST':
         json_data = json.loads(request.data)
         compass_data = json_data
-        #ros.loginfo('/webhook/compass{' + 'heading: ' + str(json_data['heading']) + '}')
-        #compass_pub.send(ros.json_to_msg(request.data, msgs.compass))
+        ros.loginfo('/webhook/compass{' + 'heading: ' + str(json_data['heading']) + '}')
+        compass_pub.send(ros.json_to_msg(request.data, msgs.compass))
         return True
     else:
         return jsonify(compass_data)
