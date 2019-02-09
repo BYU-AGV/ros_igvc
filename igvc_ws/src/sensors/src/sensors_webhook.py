@@ -167,10 +167,10 @@ This initializes the ROS node and sets up publishers
 def start_ros():
     global gps_pub, imu_pub, gyroscope_pub, compass_pub
     ros.init_node('micro_server')
-    gps_pub = ros.Publisher('gps_sensor_raw', msgs.gps)
-    imu_pub = ros.Publisher('imu_sensor_imu_raw', msgs.imu)
-    gyroscope_pub = ros.Publisher('gyroscope_sensor_raw', msgs.gyroscope)
-    compass_pub = ros.Publisher('compass_sensor_raw', msgs.compass)
+    gps_pub = ros.Publisher('sensor_gps_raw', msgs.gps)
+    imu_pub = ros.Publisher('sensor_imu_imu_raw', msgs.imu)
+    gyroscope_pub = ros.Publisher('sensor_gyroscope_raw', msgs.gyroscope)
+    compass_pub = ros.Publisher('sensor_compass__raw', msgs.compass)
 
 
 

@@ -32,6 +32,6 @@ def callback(msg_data):
 '''
 if __name__ == '__main__':
     ros.init_node('gyroscope_node')
-    sub = ros.Subscriber('gyroscope_sensor_raw', msgs.gyroscope, call=callback)
+    sub = ros.Subscriber('sensor_gyroscope_raw', msgs.gyroscope, call=callback)
     ros.spin()
 

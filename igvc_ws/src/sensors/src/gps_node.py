@@ -27,7 +27,7 @@ def callback(gps_data):
 '''
 def start_listening():
     ros.init_node('gps_node')
-    sub = ros.Subscriber('gps_sensor_raw', msgs.gps, callback)
+    sub = ros.Subscriber('sensor_gps_raw', msgs.gps, callback)
     ros.spin()
 
 
