@@ -41,7 +41,7 @@ def display_graph(g_map):
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
 
-def scale_up(obj, scale=1000000000):
+def scale_up(obj, scale=3000000000):
     try: return map(lambda x : x*scale, obj)
     except TypeError: return obj*scale
 

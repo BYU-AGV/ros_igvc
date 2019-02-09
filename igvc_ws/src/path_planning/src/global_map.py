@@ -61,7 +61,7 @@ class Map(object):
         '''
 
         for n in self.nodes:
-            if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= n.get_radius():
+            if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()):
                 n.add_parent(self.last_node)
                 return n
         return None
@@ -116,7 +116,7 @@ class Map(object):
 
             x[i] = x_
             y[i] = y_
-            s[i] = math.pi * self.meters_to_gps_radius_squared(x_, y_ , r)
+            s[i] = math.pi * self.meters_to_gps_radius_squared(x_, y_ , self.last_node.get_radius())
 
             for p in n.get_parents():
                 if p == None: continue
@@ -142,6 +142,8 @@ class Map(object):
         # OffsetPosition, decimal degrees
         latO = lat + dLat * 180/math.pi
         lonO = lon + dLon * 180/math.pi
+
+        # println(self.eculid_dist_squared(lat,lon,latO,lonO))
         
         return self.eculid_dist_squared(lat,lon,latO,lonO)
 
