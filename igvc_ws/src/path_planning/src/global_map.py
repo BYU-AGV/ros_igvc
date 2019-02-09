@@ -60,13 +60,15 @@ class Map(object):
             Returns:    the Node at that location, None if one does not exist
         '''
 
+        return None # REMOVE HERE
+
         for n in self.nodes:
             if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()):
                 n.add_parent(self.last_node)
                 return n
         return None
 
-    def eculid_dist(self, x1, y1, x2, y2, scale=1e6):
+    def eculid_dist(self, x1, y1, x2, y2):
         ''' Returns the eculidean distance between two points
 
             Args:   x1 - point 1's x position
@@ -77,7 +79,7 @@ class Map(object):
             Returns:    A double representing the distance between points
         '''
 
-        return math.sqrt((x2*scale - x1*scale)**2 + (y2*scale - y1*scale)**2)
+        return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 
     def eculid_dist_squared(self, x1, y1, x2, y2):
         ''' Returns the eculidean distance between two points
