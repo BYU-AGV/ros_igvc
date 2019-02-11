@@ -9,15 +9,22 @@ from ros_api import println
 import custom_msgs.msg as msgs
 import custom_msgs.srv as srv
 import rospy
+import math
 
 last_gps_data = None
 
 
 def location_to_waypoint(request):
-    if last_gps_data = None:
+    if last_gps_data == None:
         return srv.location_to_waypointResponse(0, 0, 0, 0, 0)
     # Do some fancy calculations to figure out stuff
-    return srv.location_to_waypointResponse(0, 0, 0, 0, 0)
+    r = 6378.137 # earth circumfrance in km
+    dlat = ((request.latitude * math.pi) / 180.0) - ((last_gps_data.latitude * math.pi) / 180.0)
+    dlon = ((request.longitude * math.pi) / 180.0) - ((last_gps_data.latitude * math.pi) / 180.0)
+    hav = math.sin(dlat / 2.0) * math.sin(dlat / 2.0) + math.cos(last_gps_data.latitude * math.pi / 180.0) * math.cos(request.latitude * math.pi / 180.0) * math.sin(dlon / 2.0) * math.sin(dlon / 2.0)
+    c = 2.0 * math.atan2(math.sqrt(hav), math.sqrt(1.0 - hav))
+    dist = r * c * 1000
+    return srv.location_to_waypointResponse(0, 0, 0, dist, 0)
 
 
 def create_service_proxy():
@@ -31,6 +38,7 @@ def create_service_proxy():
 '''
 def callback(gps_data):
     global last_gps_data
+    println("Distance: " + str(location_to_waypoint(gps_data).distance))
     last_gps_data = gps_data
     println("Data: {} ".format(gps_data))
 
