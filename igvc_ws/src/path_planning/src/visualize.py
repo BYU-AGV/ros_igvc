@@ -27,19 +27,20 @@ def display_graph(g_map):
     plt.cla()
     plt.title('Global Map')
     plt.gca().set_aspect('equal')
+    plt.gca().autoscale(tight=False)
 
     x,y,s,arrows = g_map.get_scatter_data()
 
     # cm = plt.cm.get_cmap('Blues')
     c = np.linspace(0, 1, len(x))
 
-    plt.scatter(scale_up(x,1e6),scale_up(y,1e6), s=scale_up(s), c=c)
+    plt.scatter(x,y, s=4, c=c)
     
     px,py,ps = g_map.get_last_point_scatter()
-    plt.scatter(scale_up(px,1e6),scale_up(py,1e6), s=scale_up(ps), color='red')
+    plt.scatter(px,py, s=4, color='red')
 
     for (a,b) in arrows:
-        plt.gca().annotate("", xy=scale_up(a,1e6), xytext=scale_up(b,1e6), arrowprops=dict(arrowstyle="->"))
+        plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
 
 def scale_up(obj, scale=3000000000):
     try: return map(lambda x : x*scale, obj)
