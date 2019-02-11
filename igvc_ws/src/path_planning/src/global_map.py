@@ -61,18 +61,14 @@ class Map(object):
         '''
 
         for n in self.nodes:
-            println(self.gps_dist_in_meters(latitude, longitude, n.get_latitude(), n.get_longitude()))
-            println(n.get_radius())
-
             if self.gps_dist_in_meters(latitude, longitude, n.get_latitude(), n.get_longitude()) <= n.get_radius():
                 n.add_parent(self.last_node)
                 return n
-            
 
         return None
 
     def eculid_dist(self, x1, y1, x2, y2):
-        ''' Returns the eculidean distance between two points
+        ''' Returns the eculidean distance between two eculidean points
 
             Args:   x1 - point 1's x position
                     y1 - point 1's y position
@@ -83,21 +79,6 @@ class Map(object):
         '''
 
         return math.sqrt((x2-x1)**2 + (y2-y1)**2)
-
-    def gps_dist_in_meters(self, lat1, lon1, lat2, lon2):
-        R = 6378137
-
-        d_lat = math.radians(lat2-lat1)
-        d_lon = math.radians(lon2-lon1)
-
-        lat1 = math.radians(lat1)
-        lat2 = math.radians(lat2)
-
-        a = math.sin(d_lat/2) * math.sin(d_lat/2) + \
-            math.sin(d_lon/2) * math.sin(d_lon/2) * \
-            math.cos(lat1) * math.cos(lat2)
-
-        return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
 
     def eculid_dist_squared(self, x1, y1, x2, y2):
         ''' Returns the eculidean distance between two points
@@ -111,6 +92,31 @@ class Map(object):
         '''
 
         return (x2-x1)**2 + (y2-y1)**2
+    
+    def gps_dist_in_meters(self, lat1, lon1, lat2, lon2):
+        ''' Returns the distance in meters between two gps locations
+
+            Args:   lat1 - gps 1's latitude coordinate 
+                    lon1 - gps 1's longitude coordinate 
+                    lat2 - gps 2's latitude coordinate 
+                    lon2 - gps 2's longitude coordinate 
+
+            Returns:    A double representing the distance between coordinates
+        '''
+
+        R = 6378137
+
+        d_lat = math.radians(lat2-lat1)
+        d_lon = math.radians(lon2-lon1)
+
+        lat1 = math.radians(lat1)
+        lat2 = math.radians(lat2)
+
+        a = math.sin(d_lat/2) * math.sin(d_lat/2) + \
+            math.sin(d_lon/2) * math.sin(d_lon/2) * \
+            math.cos(lat1) * math.cos(lat2)
+
+        return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
 
     def pickle(self, path):
         ''' Saves the current Map as a pickled file
@@ -136,7 +142,7 @@ class Map(object):
 
             x[i] = x_
             y[i] = y_
-            s[i] = math.pi * self.meters_to_gps_radius_squared(x_, y_ , self.last_node.get_radius())
+            s[i] = n.get_radius()
 
             for p in n.get_parents():
                 if p == None: continue
@@ -149,37 +155,5 @@ class Map(object):
         x_ = self.last_node.get_latitude()
         y_ = self.last_node.get_longitude()
         r = self.last_node.get_radius()
-        return x_,y_, math.pi * self.meters_to_gps_radius_squared(x_, y_, r)
-
-    def meters_to_gps_radius_squared(self, lat, lon, m):
-        # Earth's radius, sphere
-        R = 6378137
-
-        # Coordinate offsets in radians
-        dLat = m/R
-        dLon = m/(R*math.cos(math.pi*lat/180))
-
-        # OffsetPosition, decimal degrees
-        latO = lat + dLat * 180/math.pi
-        lonO = lon + dLon * 180/math.pi
-
-        # println(self.eculid_dist_squared(lat,lon,latO,lonO))
-        
-        return self.eculid_dist_squared(lat,lon,latO,lonO)
-
-    def meters_to_gps_radius(self, lat, lon, m):
-        # Earth's radius, sphere
-        R = 6378137
-
-        m = math.sqrt(m)
-
-        # Coordinate offsets in radians
-        dLat = m/R
-        dLon = m/(R*math.cos(math.pi*lat/180))
-
-        # OffsetPosition, decimal degrees
-        latO = lat + dLat * 180/math.pi
-        lonO = lon + dLon * 180/math.pi
-
-        return self.eculid_dist(lat,lon,latO,lonO)
+        return x_,y_, math.pi * r**2
 
