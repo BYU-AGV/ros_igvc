@@ -60,12 +60,20 @@ class Map(object):
             Returns:    the Node at that location, None if one does not exist
         '''
 
-        return None # REMOVE HERE
-
         for n in self.nodes:
+
+            # println(self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude())) 
+            # println(self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()))
+            # println()
+            
+            '''
             if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()):
                 n.add_parent(self.last_node)
                 return n
+            '''
+            
+            println(self.gps_dist_in_meters(latitude, longitude, n.get_latitude(), n.get_longitude()))
+
         return None
 
     def eculid_dist(self, x1, y1, x2, y2):
@@ -80,6 +88,21 @@ class Map(object):
         '''
 
         return math.sqrt((x2-x1)**2 + (y2-y1)**2)
+
+    def gps_dist_in_meters(self, lat1, lon1, lat2, lon2):
+        R = 6378137
+
+        d_lat = math.radians(lat2-lat1)
+        d_lon = math.radians(lon2-lon1)
+
+        lat1 = math.radians(lat1)
+        lat2 = math.radians(lat2)
+
+        a = math.sin(d_lat/2) * math.sin(d_lat/2) + \
+            math.sin(d_lon/2) * math.sin(d_lon/2) * \
+            math.cos(lat1) * math.cos(lat2)
+
+        return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
 
     def eculid_dist_squared(self, x1, y1, x2, y2):
         ''' Returns the eculidean distance between two points
@@ -153,6 +176,8 @@ class Map(object):
         # Earth's radius, sphere
         R = 6378137
 
+        m = math.sqrt(m)
+
         # Coordinate offsets in radians
         dLat = m/R
         dLon = m/(R*math.cos(math.pi*lat/180))
@@ -160,6 +185,14 @@ class Map(object):
         # OffsetPosition, decimal degrees
         latO = lat + dLat * 180/math.pi
         lonO = lon + dLon * 180/math.pi
+
+        println(m)
+        println(lat)
+        println(lon)
+        println(latO)
+        println(lonO)
+        println()
+        println()
         
         return self.eculid_dist(lat,lon,latO,lonO)
-        
+

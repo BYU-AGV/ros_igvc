@@ -22,8 +22,8 @@ if __name__ == '__main__':
     lon = -111.6493612
 
     while ros.is_running():
-        n_lat = random.random()*1e-6
-        n_lon = random.random()*1e-6
+        n_lat = random.random()*1e-5
+        n_lon = random.random()*1e-5
 
         lat = random.choice((lat+n_lat,lat-n_lat))
         lon = random.choice((lon+n_lon,lon-n_lon))
