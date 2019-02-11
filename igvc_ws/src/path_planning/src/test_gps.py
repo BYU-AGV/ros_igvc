@@ -2,7 +2,7 @@
 
 '''
 Description: This is a test script to simulate gps data (generates random data)
-Last Modified: 7 Feb 2019
+Last Modified: 11 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -16,16 +16,18 @@ if __name__ == '__main__':
     ros.init_node('fake_gps')
     pub = ros.Publisher('test_gps', msgs.gps)
 
-    lat = random.random()*10
-    lon = random.random()*10
+    # lat = random.random()*10
+    # lon = random.random()*10
+    lat = 40.249183699999996
+    lon = -111.6493612
 
     while ros.is_running():
-        n_lat = random.random()*.001
-        n_lon = random.random()*.001
+        n_lat = random.random()*1e-6
+        n_lon = random.random()*1e-6
 
         lat = random.choice((lat+n_lat,lat-n_lat))
         lon = random.choice((lon+n_lon,lon-n_lon))
-        acc = random.random()*5 + 1
+        acc = random.random()*15 + 3
 
         pub.send(   latitude=lat, \
                     longitude=lon, \
