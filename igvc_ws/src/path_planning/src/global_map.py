@@ -61,18 +61,13 @@ class Map(object):
         '''
 
         for n in self.nodes:
+            println(self.gps_dist_in_meters(latitude, longitude, n.get_latitude(), n.get_longitude()))
+            println(n.get_radius())
 
-            # println(self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude())) 
-            # println(self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()))
-            # println()
-            
-            '''
-            if self.eculid_dist(latitude, longitude, n.get_latitude(), n.get_longitude()) <= self.meters_to_gps_radius(n.get_latitude(),n.get_longitude(), n.get_radius()):
+            if self.gps_dist_in_meters(latitude, longitude, n.get_latitude(), n.get_longitude()) <= n.get_radius():
                 n.add_parent(self.last_node)
                 return n
-            '''
             
-            println(self.gps_dist_in_meters(latitude, longitude, n.get_latitude(), n.get_longitude()))
 
         return None
 
@@ -186,13 +181,5 @@ class Map(object):
         latO = lat + dLat * 180/math.pi
         lonO = lon + dLon * 180/math.pi
 
-        println(m)
-        println(lat)
-        println(lon)
-        println(latO)
-        println(lonO)
-        println()
-        println()
-        
         return self.eculid_dist(lat,lon,latO,lonO)
 
