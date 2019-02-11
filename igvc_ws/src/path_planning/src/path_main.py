@@ -48,8 +48,8 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit_nicely)
 
     ros.init_node('pathing_node')
-    sub = ros.Subscriber('test_gps', msgs.gps, call=callback)
-    # sub = ros.Subscriber('sensor_gps_raw', msgs.gps, call=callback)
+    # sub = ros.Subscriber('test_gps', msgs.gps, call=callback)
+    sub = ros.Subscriber('sensor_gps_raw', msgs.gps, call=callback)
 
     try: ros.spin()
     except RuntimeError: pass

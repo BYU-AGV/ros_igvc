@@ -7,8 +7,21 @@
 import ros_api as ros
 from ros_api import println
 import custom_msgs.msg as msgs
+import custom_msgs.srv as srv
+import rospy
 
 last_gps_data = None
+
+
+def location_to_waypoint(request):
+    if last_gps_data = None:
+        return srv.location_to_waypointResponse(0, 0, 0, 0, 0)
+    # Do some fancy calculations to figure out stuff
+    return srv.location_to_waypointResponse(0, 0, 0, 0, 0)
+
+
+def create_service_proxy():
+        service = rospy.Service('location_to_waypoint', srv.location_to_waypoint, location_to_waypoint)
 
 '''
     This is the callback for the subscriber, updates the current gps location
@@ -28,9 +41,10 @@ def callback(gps_data):
 def start_listening():
     ros.init_node('gps_node')
     sub = ros.Subscriber('sensor_gps_raw', msgs.gps, callback)
-    ros.spin()
 
 
 
 if __name__ == '__main__':
     start_listening()
+    create_service_proxy()
+    ros.spin()

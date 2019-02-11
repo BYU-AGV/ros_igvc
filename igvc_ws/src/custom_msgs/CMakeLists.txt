@@ -57,7 +57,7 @@ add_message_files(
 # Generate services in the 'srv' folder
  add_service_files(
    FILES
-   waypoint_distance_orientation.srv
+   location_to_waypoint.srv
  )
 
 ## Generate actions in the 'action' folder
