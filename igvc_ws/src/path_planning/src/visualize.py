@@ -2,7 +2,7 @@
 
 '''
 Description: This is a script for visualizing the global map
-Last Modified: 8 Feb 2019
+Last Modified: 11 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -34,10 +34,10 @@ def display_graph(g_map):
     # cm = plt.cm.get_cmap('Blues')
     c = np.linspace(0, 1, len(x))
 
-    plt.scatter(x,y, s=4, c=c)
+    plt.scatter(x,y, s=s, c=c)
     
     px,py,ps = g_map.get_last_point_scatter()
-    plt.scatter(px,py, s=4, color='red')
+    plt.scatter(px,py, s=ps, color='red')
 
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))

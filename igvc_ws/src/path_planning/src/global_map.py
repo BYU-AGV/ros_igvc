@@ -2,7 +2,7 @@
 
 '''
 Description: This is a class to represent a 2-d map (top down) of known traversible space
-Last Modified: 8 Feb 2019
+Last Modified: 11 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -142,7 +142,7 @@ class Map(object):
 
             x[i] = x_
             y[i] = y_
-            s[i] = n.get_radius()
+            s[i] = math.pi * n.get_radius()**2
 
             for p in n.get_parents():
                 if p == None: continue
