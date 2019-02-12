@@ -142,7 +142,7 @@ class Map(object):
 
             x[i] = x_
             y[i] = y_
-            s[i] = math.pi * n.get_radius()**2
+            s[i] = n.get_radius()
 
             for p in n.get_parents():
                 if p == None: continue
@@ -155,5 +155,5 @@ class Map(object):
         x_ = self.last_node.get_latitude()
         y_ = self.last_node.get_longitude()
         r = self.last_node.get_radius()
-        return x_,y_, math.pi * r**2
+        return x_,y_,r
 
