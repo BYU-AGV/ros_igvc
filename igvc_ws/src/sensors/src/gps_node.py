@@ -14,19 +14,37 @@ import math
 last_gps_data = None
 
 
+'''
+    This is ther service proxy, function is triggered when a node calls the server proxy through ROS
+
+    agrs: requet - it is the request .srv message
+'''
 def location_to_waypoint(request):
-    if last_gps_data == None:
-        return srv.location_to_waypointResponse(0, 0, 0, 0, 0)
-    # Do some fancy calculations to figure out stuff
-    r = 6378.137 # earth circumfrance in km
-    dlat = ((request.latitude * math.pi) / 180.0) - ((last_gps_data.latitude * math.pi) / 180.0)
-    dlon = ((request.longitude * math.pi) / 180.0) - ((last_gps_data.latitude * math.pi) / 180.0)
-    hav = math.sin(dlat / 2.0) * math.sin(dlat / 2.0) + math.cos(last_gps_data.latitude * math.pi / 180.0) * math.cos(request.latitude * math.pi / 180.0) * math.sin(dlon / 2.0) * math.sin(dlon / 2.0)
-    c = 2.0 * math.atan2(math.sqrt(hav), math.sqrt(1.0 - hav))
-    dist = r * c * 1000
+    dist = waypoint_to_waypoint(last_gps_data, request)
     return srv.location_to_waypointResponse(0, 0, 0, dist, 0)
 
 
+'''
+    Calculates the distance between two waypoints. Uses the haversine forumla to calculate the shortest distance between the two waypoints
+
+    args: way1 - a waypoint of the type msgs.gps
+          way2 - second waypoint of the same type
+'''
+def waypoint_to_waypoint(way1, way2):
+    if way1 == None or way2 == None:
+        return 0
+    # Do some fancy calculations to figure out stuff
+    r = 6378137 # earth circumfrance in km
+    dlat = ((way2.latitude * math.pi) / 180.0) - ((way1.latitude * math.pi) / 180.0)
+    dlon = ((way2.longitude * math.pi) / 180.0) - ((way1.longitude * math.pi) / 180.0)
+    hav = math.sin(dlat / 2.0) * math.sin(dlat / 2.0) + math.cos(way1.latitude * math.pi / 180.0) * math.cos(way2.latitude * math.pi / 180.0) * math.sin(dlon / 2.0) * math.sin(dlon / 2.0)
+    c = 2.0 * math.atan2(math.sqrt(hav), math.sqrt(1.0 - hav))
+    return r * c
+
+
+'''
+    This creates the service proxy that will be triggered when called through ROS
+'''
 def create_service_proxy():
         service = rospy.Service('location_to_waypoint', srv.location_to_waypoint, location_to_waypoint)
 
