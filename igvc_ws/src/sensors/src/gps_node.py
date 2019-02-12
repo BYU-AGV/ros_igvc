@@ -77,6 +77,7 @@ def waypoint_to_waypoint_dist(way1, way2):
 def create_service_proxy():
         service = rospy.Service('location_to_waypoint', srv.location_to_waypoint, location_to_waypoint)
 
+
 '''
     This is the callback for the subscriber, updates the current gps location
 
@@ -85,7 +86,7 @@ def create_service_proxy():
 '''
 def callback(gps_data):
     global last_gps_data
-    heading_data = location_to_waypoint(gps_data)
+    heading_data = location_to_waypoint(gps_data) # Get data between the old and new gps locations
     println("Change: {} ".format(heading_data))
     last_gps_data = gps_data
     println("Data: {} ".format(gps_data))
