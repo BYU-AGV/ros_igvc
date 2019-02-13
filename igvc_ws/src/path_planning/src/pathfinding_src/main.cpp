@@ -280,7 +280,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 		return NULL;
 
 	// default values
-	if (method == NULL) method = (char*)"bfs";
+	if (method == NULL) method = (char*)"a*";
 	if (func == NULL) func = (char*)"euclid";
 
 	std::string algorithm = std::string(method);
