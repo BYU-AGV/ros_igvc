@@ -2,7 +2,7 @@
 
 '''
 Description: This is a class to represent a 2-d map (top down) of known traversible space
-Last Modified: 11 Feb 2019
+Last Modified: 13 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -52,7 +52,7 @@ class Map(object):
         return node
 
     def location_within_node(self, latitude, longitude):
-        ''' Checks whether a location already has a node with that location
+        ''' Checks whether a gps location already has a node with that location
 
             Args:   latitude - the gps latitude location
                     longitude - the gps longitude location
@@ -152,6 +152,8 @@ class Map(object):
         return x,y,s,arrows
 
     def get_last_point_scatter(self):
+        ''' Returns the last point in a data format for a scatter plot '''
+
         x_ = self.last_node.get_latitude()
         y_ = self.last_node.get_longitude()
         r = self.last_node.get_radius()

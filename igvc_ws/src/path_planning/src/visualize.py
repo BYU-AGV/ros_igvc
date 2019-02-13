@@ -2,7 +2,7 @@
 
 '''
 Description: This is a script for visualizing the global map
-Last Modified: 11 Feb 2019
+Last Modified: 13 Feb 2019
 Author: Isaac Draper
 '''
 
@@ -43,10 +43,14 @@ def display_graph(g_map):
     for (a,b) in arrows:
         plt.gca().annotate("", xy=a, xytext=b, arrowprops=dict(arrowstyle="->"))
 
-def meters_to_angle(m):
-    return 100
-
 def scale_sizes(g_map, sizes):
+    ''' Takes a list (or scalar) of sizes and scales them for the map
+
+        Args:   sizes - a list of numbers, or a single number to scale
+
+        Returns:    A scaled list of numbers for map scatter point sizes
+    '''
+
     l_xlim,r_xlim = plt.xlim()
     l_ylim,r_ylim = plt.ylim()
 
@@ -61,18 +65,13 @@ def scale_sizes(g_map, sizes):
     md_xlim = g_map.gps_dist_in_meters(l_xlim,0,r_xlim,0)
     md_ylim = g_map.gps_dist_in_meters(0,l_ylim,0,r_ylim)
 
-    ratio = md_xlim / width
     ratio = width / md_xlim
 
-    println(ratio)
-    println()
-
     try: sizes[0]
-    except TypeError: return (math.pi*(sizes)**2)*ratio
+    except TypeError: return (math.pi*sizes**2)*ratio
 
     new_s = []
     for s in sizes:
-        # new_s.append(math.pi*(s*ratio)**2)
         new_s.append((math.pi*s**2)*ratio)
 
     return new_s 
