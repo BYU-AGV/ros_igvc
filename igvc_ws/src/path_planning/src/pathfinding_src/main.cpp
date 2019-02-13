@@ -13,14 +13,14 @@ Author: Isaac Draper
 #include "structs.cpp"
 
 // Reference of all functions to be exported
-static PyObject* runAlgorithm(PyObject* self, PyObject* args);
+static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs);
 
 // ------------------------------------------------------------------------------------
 // All functions in this section are required functions for building
 // ------------------------------------------------------------------------------------
 
 static PyMethodDef Methods[] = {
-	{"run",  runAlgorithm, METH_VARARGS, "Run a pathing algorithm"},
+	{"search",  (PyCFunction)runAlgorithm, METH_VARARGS | METH_KEYWORDS, "Run a pathing algorithm"},
 	{NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -136,8 +136,11 @@ static PyObject* nodesToObject(std::vector<pos*>* nodes) {
 
 }
 
-static PyObject* runAlgorithm(PyObject* self, PyObject* args) {
+static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) {
 	Py_ssize_t TupleSize = PyTuple_Size(args);
+
+	static const char* kwlist[] = {"", "", "test", NULL};
+	char* test_kw = (char*)"meh";
 
 	if (!TupleSize || TupleSize < 2) {
 		if(!PyErr_Occurred()) 
@@ -148,7 +151,16 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args) {
 	PyObject *obj1;
 	PyObject *obj2;
 
-	if (!PyArg_ParseTuple(args, "OO", &obj1, &obj2)) {
+	/* Uncomment to view inputs
+	PyObject_Print(self, stdout, 0);
+	fprintf(stdout, "\n");
+	PyObject_Print(args, stdout, 0);
+	fprintf(stdout, "\n");
+	PyObject_Print(kwargs, stdout, 0);
+	fprintf(stdout, "\n");
+	*/
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|s", const_cast<char**>(kwlist), &obj1, &obj2, &test_kw)) {
 		PyErr_SetString(PyExc_TypeError,"Error parsing input");
 		return NULL;
 	}
@@ -161,5 +173,4 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args) {
 
 	return nodesToObject(nodes);
 }
-
 
