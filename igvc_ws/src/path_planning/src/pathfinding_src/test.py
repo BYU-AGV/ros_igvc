@@ -9,15 +9,15 @@ Author: Isaac Draper
 import pathfinding
 
 nodes = [
-            (0,0),
-            (1,0),
-            (2,0)
+            [0,0],
+            [1,0],
+            [2,0]
         ]
 
 weights = [
-            (0,0,1),
-            (1,0,0),
-            (0,1,0)
+            [0,0,1],
+            [1,0,0],
+            [0,1,0]
           ]
 
 print pathfinding.run(nodes, weights)
