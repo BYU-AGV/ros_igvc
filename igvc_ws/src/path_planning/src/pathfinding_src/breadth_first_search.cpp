@@ -15,9 +15,11 @@ static void run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vect
 	std::queue<pos*> queue;
 	queue.push(start);
 
-	bool* visited = new bool[nodes->size()];
-	visited[0] = true;
+	std::unordered_map<pos*,bool> visited;
+	for (auto p : *nodes) visited.insert({p,false});
+	visited.at(start) = true;
 
+	/*
 	for (auto p : *nodes) {
 		print_pos(p);
 		std::cout << "\t";
@@ -25,12 +27,29 @@ static void run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vect
 			std::cout << i << " ";
 		std::cout << std::endl;
 	}
-	
-	pos* curr = NULL;
+	*/
+
+	pos* curr = start;
 	while (queue.size() > 0 && !equal_pos(goal, curr)) {
 		curr = queue.front();
 		queue.pop();
 
+		std::cout << "Curr: ";
+		print_pos(curr);
+		std::cout << std::endl;
+
+		int i = 0;
+		for (int w : *(edges->at(curr))) {
+			if (w == 0 || equal_pos(nodes->at(i), curr) || visited.at(nodes->at(i))) {
+				i++;
+				continue;
+			}
+
+			visited.at(nodes->at(i)) = true;
+			queue.push(nodes->at(i));
+
+			i++;
+		}
 	}
 
 	return;

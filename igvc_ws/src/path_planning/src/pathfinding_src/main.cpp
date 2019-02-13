@@ -188,8 +188,38 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 
 	auto nodes = parseNodes(obj1);
 	auto edges = parseEdges(nodes, obj2);
-	pos* start = parsePos(obj3);
-	pos* goal = parsePos(obj4);
+	pos* start_tmp = parsePos(obj3);
+	pos* goal_tmp = parsePos(obj4);
+	pos* start = NULL;
+	pos* goal = NULL;
+
+	bool start_found = false;
+	bool goal_found = false;
+	for (auto p : *nodes) {
+		if (equal_pos(start_tmp, p)) {
+			start = p;
+			start_found = true;
+		}
+		if (equal_pos(goal_tmp, p)) {
+			goal = p;
+			goal_found = true;
+		}
+
+		if (start_found && goal_found)
+			break;
+	}
+
+	delete start_tmp;
+	delete goal_tmp;
+
+	if (start == NULL) {
+		PyErr_SetString(PyExc_TypeError,"Start position not found in nodes");
+		return NULL;
+	}
+	if (goal == NULL) {
+		PyErr_SetString(PyExc_TypeError,"Goal position not found in nodes");
+		return NULL;
+	}
 
 	if (nodes == NULL || edges == NULL)
 		return NULL;
