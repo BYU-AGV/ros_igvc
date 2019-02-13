@@ -154,12 +154,18 @@ static pos* parsePos(PyObject* obj) {
 	return NULL;
 }
 
+void toLower(std::string& s) {
+	for (std::string::iterator p = s.begin(); p != s.end(); ++p) {
+		*p = tolower(*p);
+	}
+}
+
 static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) {
 	Py_ssize_t TupleSize = PyTuple_Size(args);
 
-	static const char* kwlist[] = {"", "", "algorithm", "cost_function", NULL};
-	char* algorithm = NULL;
-	char* cost_function = NULL;
+	static const char* kwlist[] = {"", "", "", "", "algorithm", "cost_function", NULL};
+	char* method = NULL;
+	char* func = NULL;
 
 	if (!TupleSize || TupleSize < 4) {
 		if(!PyErr_Occurred()) 
@@ -172,7 +178,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	PyObject *obj3;
 	PyObject *obj4;
 
-	/* Uncomment to view inputs
+	/*
 	PyObject_Print(self, stdout, 0);
 	fprintf(stdout, "\n");
 	PyObject_Print(args, stdout, 0);
@@ -181,7 +187,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	fprintf(stdout, "\n");
 	*/
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOOO|ss", const_cast<char**>(kwlist), &obj1, &obj2, &obj3, &obj4, &algorithm, &cost_function)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOOO|ss", const_cast<char**>(kwlist), &obj1, &obj2, &obj3, &obj4, &method, &func)) {
 		PyErr_SetString(PyExc_TypeError,"Error parsing input");
 		return NULL;
 	}
@@ -224,16 +230,29 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	if (nodes == NULL || edges == NULL)
 		return NULL;
 
-	/*
-	if (algorithm == "A*") {
-		std::cout << "Running A*" << std::endl;
+	// default values
+	if (method == NULL) method = (char*)"bfs";
+	if (func == NULL) func = (char*)"euclid";
+
+	std::string algorithm = std::string(method);
+	std::string cost_function = std::string(func);
+
+	toLower(algorithm);
+	toLower(cost_function);
+
+	if (algorithm == "breadth_first_search" ||
+	    algorithm == "breadth_first" ||
+	    algorithm == "breadth first search" ||
+	    algorithm == "breadth first" ||
+	    algorithm == "bfs" ||
+	    algorithm == "bf") {
+		std::cout << "Running breadth first search:" << std::endl;
+		run_bfs(nodes, edges, start, goal);
 	}
 	else {
 		std::cout << "No algorithm recognized" << std::endl;
 	}
-	*/
 
-	run_bfs(nodes, edges, start, goal);
 
 	PyObject* rtn = nodesToObject(nodes);
 
