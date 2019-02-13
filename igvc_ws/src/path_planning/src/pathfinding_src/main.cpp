@@ -135,7 +135,6 @@ static PyObject* nodesToObject(std::vector<pos*>* nodes) {
 	}
 
 	return obj;
-
 }
 
 static pos* parsePos(PyObject* obj) {
@@ -152,6 +151,21 @@ static pos* parsePos(PyObject* obj) {
 	}
 
 	return NULL;
+}
+
+static PyObject* pathToObject(std::vector<pos*>* positions) {
+	PyObject* obj;
+	PyObject* row;
+
+	obj = PyList_New(positions->size());
+	for (unsigned int i = 0; i < positions->size(); i++) {
+		row = PyList_New(2);
+		PyList_SetItem(row, 0, PyFloat_FromDouble(positions->at(i)->x));
+		PyList_SetItem(row, 1, PyFloat_FromDouble(positions->at(i)->y));
+		PyList_SetItem(obj, i, row);
+	}
+
+	return obj;
 }
 
 void toLower(std::string& s) {
@@ -240,6 +254,8 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	toLower(algorithm);
 	toLower(cost_function);
 
+	PyObject* rtn = NULL;
+	
 	if (algorithm == "breadth_first_search" ||
 	    algorithm == "breadth_first" ||
 	    algorithm == "breadth first search" ||
@@ -247,14 +263,14 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	    algorithm == "bfs" ||
 	    algorithm == "bf") {
 		std::cout << "Running breadth first search:" << std::endl;
-		run_bfs(nodes, edges, start, goal);
+		rtn = pathToObject(run_bfs(nodes, edges, start, goal));
 	}
 	else {
 		std::cout << "No algorithm recognized" << std::endl;
+		rtn = nodesToObject(nodes);
 	}
 
 
-	PyObject* rtn = nodesToObject(nodes);
 
 	// clean up all memory
 	for (unsigned int i = 0; i < nodes->size(); i++) {

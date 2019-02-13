@@ -8,16 +8,26 @@ Author: Isaac Draper
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<limits>
 
+#include "heuristics.cpp"
 #include "structs.cpp"
 
-static void run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vector<double>*>* edges, pos* start, pos* goal) {
+static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vector<double>*>* edges, pos* start, pos* goal) {
 	std::queue<pos*> queue;
 	queue.push(start);
 
 	std::unordered_map<pos*,bool> visited;
-	for (auto p : *nodes) visited.insert({p,false});
+	std::unordered_map<pos*,double> dist;
+	std::unordered_map<pos*,pos*> pred;
+	for (auto p : *nodes) {
+		visited.insert({p,false});
+		dist.insert({p,std::numeric_limits<double>::max()});
+		pred.insert({p,NULL});
+	}
+
 	visited.at(start) = true;
+	dist.at(start) = 0;
 
 	/*
 	for (auto p : *nodes) {
@@ -29,29 +39,51 @@ static void run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vect
 	}
 	*/
 
-	pos* curr = start;
-	while (queue.size() > 0 && !equal_pos(goal, curr)) {
+	bool reached = false;
+	pos* curr = NULL;
+	while (queue.size() > 0) {
 		curr = queue.front();
 		queue.pop();
 
-		std::cout << "Curr: ";
-		print_pos(curr);
-		std::cout << std::endl;
-
 		int i = 0;
 		for (int w : *(edges->at(curr))) {
-			if (w == 0 || equal_pos(nodes->at(i), curr) || visited.at(nodes->at(i))) {
+			if (w == 0) {
 				i++;
 				continue;
 			}
 
-			visited.at(nodes->at(i)) = true;
-			queue.push(nodes->at(i));
+			if (!visited.at(nodes->at(i))) {
+				if (curr == goal) {
+					reached = true;
+					break;
+				}
+
+				visited.at(nodes->at(i)) = true;
+				dist.at(nodes->at(i)) = dist.at(curr) + euclid_dist(curr, nodes->at(i));
+				pred.at(nodes->at(i)) = curr;
+				queue.push(nodes->at(i));
+			}
 
 			i++;
 		}
+		if (reached) break;
 	}
 
-	return;
+
+	std::vector<pos*>* path = new std::vector<pos*>();
+	curr = goal;
+	path->push_back(curr);
+	while (pred.at(curr) != NULL) {
+		path->push_back(pred.at(curr));
+		curr = pred.at(curr);
+	}
+
+	for (unsigned int i = 0; i < path->size()/2; i++) {
+		pos* tmp = path->at(i);
+		path->at(i) = path->at(path->size()-i-1);
+		path->at(path->size()-i-1) = tmp;
+	}
+
+	return path;
 }
 
