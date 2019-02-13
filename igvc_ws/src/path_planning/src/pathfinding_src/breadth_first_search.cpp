@@ -29,16 +29,6 @@ static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<p
 	visited.at(start) = true;
 	dist.at(start) = 0;
 
-	/*
-	for (auto p : *nodes) {
-		print_pos(p);
-		std::cout << "\t";
-		for (auto i : *(edges->at(p)))
-			std::cout << i << " ";
-		std::cout << std::endl;
-	}
-	*/
-
 	bool reached = false;
 	pos* curr = NULL;
 	while (queue.size() > 0) {

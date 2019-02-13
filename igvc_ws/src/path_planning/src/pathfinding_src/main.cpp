@@ -122,6 +122,7 @@ static std::unordered_map<pos*,std::vector<double>*>* parseEdges(std::vector<pos
 	return edges;
 }
 
+/* DEPRECATED - was only used for inital testing
 static PyObject* nodesToObject(std::vector<pos*>* nodes) {
 	PyObject* obj;
 	PyObject* row;
@@ -136,6 +137,7 @@ static PyObject* nodesToObject(std::vector<pos*>* nodes) {
 
 	return obj;
 }
+*/
 
 static pos* parsePos(PyObject* obj) {
 
@@ -165,6 +167,7 @@ static PyObject* pathToObject(std::vector<pos*>* positions) {
 		PyList_SetItem(obj, i, row);
 	}
 
+	delete positions;
 	return obj;
 }
 
@@ -188,6 +191,18 @@ static fp getHFunction(std::string func) {
 	    func == "euclidean" ||
 	    func == "euclid") {
 		return euclid_dist;
+	}
+	else if (func == "manhattan distance" ||
+	    func == "manhattan_distance" ||
+	    func == "manhattan dist" ||
+	    func == "manhattan_dist" ||
+	    func == "man distance" ||
+	    func == "man_distance" ||
+	    func == "man dist" ||
+	    func == "man_dist" ||
+	    func == "manhattan" ||
+	    func == "man") {
+		return man_dist;
 	}
 
 	return NULL;
@@ -288,7 +303,6 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	    algorithm == "breadth first" ||
 	    algorithm == "bfs" ||
 	    algorithm == "bf") {
-		std::cout << "Running breadth first search:" << std::endl;
 		rtn = pathToObject(run_bfs(nodes, edges, start, goal, h_func));
 	}
 	else {
@@ -296,6 +310,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 		return NULL;
 	}
 
+	std::cout << "Ran '" << algorithm << "' using '" << func << "':" << std::endl;
 
 
 	// clean up all memory
