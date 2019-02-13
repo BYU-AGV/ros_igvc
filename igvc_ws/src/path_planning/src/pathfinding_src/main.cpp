@@ -174,6 +174,25 @@ void toLower(std::string& s) {
 	}
 }
 
+typedef double (*fp)(const pos*, const pos*);
+static fp getHFunction(std::string func) {
+
+	if (func == "euclidean distance" ||
+	    func == "euclidean_distance" ||
+	    func == "euclidean dist" ||
+	    func == "euclidean_dist" ||
+	    func == "euclid distance" ||
+	    func == "euclid_distance" ||
+	    func == "euclid dist" ||
+	    func == "euclid_dist" ||
+	    func == "euclidean" ||
+	    func == "euclid") {
+		return euclid_dist;
+	}
+
+	return NULL;
+}
+
 static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) {
 	Py_ssize_t TupleSize = PyTuple_Size(args);
 
@@ -254,6 +273,13 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	toLower(algorithm);
 	toLower(cost_function);
 
+	double (*h_func)(const pos*, const pos*) = getHFunction(func);
+	
+	if (h_func == NULL) {
+		PyErr_SetString(PyExc_TypeError,(std::string("Heuristic function '") + func + std::string("' not recognized")).c_str());
+		return NULL;
+	}
+
 	PyObject* rtn = NULL;
 	
 	if (algorithm == "breadth_first_search" ||
@@ -263,11 +289,11 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	    algorithm == "bfs" ||
 	    algorithm == "bf") {
 		std::cout << "Running breadth first search:" << std::endl;
-		rtn = pathToObject(run_bfs(nodes, edges, start, goal));
+		rtn = pathToObject(run_bfs(nodes, edges, start, goal, h_func));
 	}
 	else {
-		std::cout << "No algorithm recognized" << std::endl;
-		rtn = nodesToObject(nodes);
+		PyErr_SetString(PyExc_TypeError,(std::string("Pathfinding algorithm '") + algorithm + std::string("' not recognized")).c_str());
+		return NULL;
 	}
 
 

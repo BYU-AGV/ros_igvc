@@ -13,7 +13,7 @@ Author: Isaac Draper
 #include "heuristics.cpp"
 #include "structs.cpp"
 
-static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vector<double>*>* edges, pos* start, pos* goal) {
+static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<pos*, std::vector<double>*>* edges, pos* start, pos* goal, double h_func(const pos*,const pos*)) {
 	std::queue<pos*> queue;
 	queue.push(start);
 
@@ -59,7 +59,7 @@ static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<p
 				}
 
 				visited.at(nodes->at(i)) = true;
-				dist.at(nodes->at(i)) = dist.at(curr) + euclid_dist(curr, nodes->at(i));
+				dist.at(nodes->at(i)) = dist.at(curr) + h_func(curr, nodes->at(i));
 				pred.at(nodes->at(i)) = curr;
 				queue.push(nodes->at(i));
 			}
