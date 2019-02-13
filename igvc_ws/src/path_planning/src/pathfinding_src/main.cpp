@@ -34,10 +34,9 @@ PyMODINIT_FUNC initpathfinding(void) {
 
 static std::vector<pos*>* parseNodes(PyObject* obj) {
 	PyObject* seq;
-	Py_ssize_t i, j, rws, cls;
+	Py_ssize_t i, rws, cls;
 
 	PyObject* row;
-	PyObject* val;
 	
 	seq = PySequence_Fast(obj, "expected a sequence");
 	rws = PySequence_Size(obj);
@@ -65,7 +64,8 @@ static std::vector<pos*>* parseNodes(PyObject* obj) {
 				nodes->push_back(p);
 			}
 			else {
-				std::cout << "not a list" << std::endl;
+				PyErr_SetString(PyExc_TypeError,"Expected a list");
+				return NULL;
 			}
 		}
 	}
@@ -76,15 +76,26 @@ static std::vector<pos*>* parseNodes(PyObject* obj) {
 	return nodes;
 }
 
+static PyObject* nodesToObject(std::vector<pos*>* nodes) {
+	PyObject* obj;
+	PyObject* row;
+
+	obj = PyList_New(nodes->size());
+	for (unsigned int i = 0; i < nodes->size(); i++) {
+		row = PyList_New(2);
+		PyList_SetItem(row, 0, PyFloat_FromDouble(nodes->at(i)->x));
+		PyList_SetItem(row, 1, PyFloat_FromDouble(nodes->at(i)->y));
+		PyList_SetItem(obj, i, row);
+	}
+
+	return obj;
+
+}
+
 static PyObject* runAlgorithm(PyObject* self, PyObject* args) {
 	Py_ssize_t TupleSize = PyTuple_Size(args);
 
-	if(!TupleSize) {
-		if(!PyErr_Occurred()) 
-			PyErr_SetString(PyExc_TypeError,"You must supply two inputs.");
-		return NULL;
-	}
-	else if (TupleSize < 2) {
+	if (!TupleSize || TupleSize < 2) {
 		if(!PyErr_Occurred()) 
 			PyErr_SetString(PyExc_TypeError,"You must supply two inputs.");
 		return NULL;
@@ -103,7 +114,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args) {
 	if (vec == NULL)
 		return NULL;
 
-	return PyFloat_FromDouble(5.0);
+	return nodesToObject(vec);
 }
 
 
