@@ -14,6 +14,7 @@ Author: Isaac Draper
 
 #include "structs.cpp"
 #include "breadth_first_search.cpp"
+#include "a_star.cpp"
 
 // Reference of all functions to be exported
 static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs);
@@ -304,6 +305,11 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	    algorithm == "bfs" ||
 	    algorithm == "bf") {
 		rtn = pathToObject(run_bfs(nodes, edges, start, goal, h_func));
+	}
+	else if (algorithm == "a star" ||
+	    algorithm == "a_star" ||
+	    algorithm == "a*") {
+		rtn = pathToObject(run_a_star(nodes, edges, start, goal, h_func));
 	}
 	else {
 		PyErr_SetString(PyExc_TypeError,(std::string("Pathfinding algorithm '") + algorithm + std::string("' not recognized")).c_str());
