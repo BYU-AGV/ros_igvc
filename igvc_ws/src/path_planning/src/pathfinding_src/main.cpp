@@ -76,6 +76,50 @@ static std::vector<pos*>* parseNodes(PyObject* obj) {
 	return nodes;
 }
 
+static std::vector<std::vector<double>*>* parseEdges(PyObject* obj) {
+	PyObject* seq;
+	Py_ssize_t i, j, rws, cls;
+
+	PyObject* row;
+	PyObject* col;
+	
+	seq = PySequence_Fast(obj, "expected a sequence");
+	rws = PySequence_Size(obj);
+
+	std::vector<std::vector<double>*>* edges = new std::vector<std::vector<double>*>();
+	edges->reserve(rws);
+
+	if (PyList_Check(seq)) {
+		for (i = 0; i < rws; i++) {
+			row = PySequence_Fast(PyList_GET_ITEM(seq, i), "here in rows");
+			if (PyList_Check(row)) {
+				cls = PySequence_Size(row);
+
+				col = PySequence_Fast(PyList_GET_ITEM(seq, i), "here in rows");
+
+				std::vector<double>* node = new std::vector<double>();
+
+				if (PyList_Check(col)) {
+					for (j = 0; j < rws; j++) {
+						node->push_back(PyFloat_AsDouble(PyList_GET_ITEM(col, j)));
+					}
+				}
+
+				edges->push_back(node);
+			}
+			else {
+				PyErr_SetString(PyExc_TypeError,"Expected a list");
+				return NULL;
+			}
+		}
+	}
+	else {
+		PyErr_SetString(PyExc_TypeError,"Expected a sequence");
+	}
+
+	return edges;
+}
+
 static PyObject* nodesToObject(std::vector<pos*>* nodes) {
 	PyObject* obj;
 	PyObject* row;
@@ -109,12 +153,13 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args) {
 		return NULL;
 	}
 
-	auto vec = parseNodes(obj1);
+	auto nodes = parseNodes(obj1);
+	auto edges = parseEdges(obj2);
 
-	if (vec == NULL)
+	if (nodes == NULL || edges == NULL)
 		return NULL;
 
-	return nodesToObject(vec);
+	return nodesToObject(nodes);
 }
 
 
