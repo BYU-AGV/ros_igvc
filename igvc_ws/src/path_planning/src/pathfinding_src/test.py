@@ -20,5 +20,5 @@ weights = [
             [0,1,0]
           ]
 
-print pathfinding.search(nodes, weights, test='test')
+print pathfinding.search(nodes, weights, [0,0], [0,0])
 
