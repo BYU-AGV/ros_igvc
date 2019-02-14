@@ -316,7 +316,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 		return NULL;
 	}
 
-	std::cout << "Ran '" << algorithm << "' using '" << func << "':" << std::endl;
+	// std::cout << "Ran '" << algorithm << "' using '" << func << "':" << std::endl;
 
 
 	// clean up all memory

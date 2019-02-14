@@ -14,11 +14,11 @@ nodes = [
             [2,0]
         ]
 
-weights = [
+edges = [
             [0,0,1],
-            [1,0,0],
+            [1,1,0],
             [0,1,0]
           ]
 
-print pathfinding.search(nodes, weights, [2,0], [0,0], 'bfs', 'euclid')
+print pathfinding.search(nodes, edges, [0,0], [1,0], algorithm='bfs', cost_function='man')
 
