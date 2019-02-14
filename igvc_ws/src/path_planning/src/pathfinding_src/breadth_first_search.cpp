@@ -61,11 +61,11 @@ static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<p
 
 	std::vector<pos*>* path = new std::vector<pos*>();
 	curr = goal;
-	path->push_back(curr);
 	while (pred.at(curr) != NULL) {
-		path->push_back(pred.at(curr));
+		path->push_back(curr);
 		curr = pred.at(curr);
 	}
+	path->push_back(start);
 
 	for (unsigned int i = 0; i < path->size()/2; i++) {
 		pos* tmp = path->at(i);

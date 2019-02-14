@@ -78,9 +78,11 @@ static std::vector<pos*>* run_a_star(std::vector<pos*>* nodes, std::unordered_ma
 
 	std::vector<pos*>* path = new std::vector<pos*>();
 	curr = goal;
-	while (parents.at(curr) != curr) {
-		path->push_back(curr);
-		curr = parents.at(curr);
+	if (parents.at(goal) != NULL) {
+		while (parents.at(curr) != curr) {
+			path->push_back(curr);
+			curr = parents.at(curr);
+		}
 	}
 	path->push_back(start);
 
