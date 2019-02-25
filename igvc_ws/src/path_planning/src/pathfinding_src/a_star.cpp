@@ -1,6 +1,6 @@
 /*
 Description: This is a script that implements the A* pathfinding algorithm 
-Last Modified: 13 Feb 2019
+Last Modified: 25 Feb 2019
 Author: Isaac Draper
 */
 
@@ -38,10 +38,13 @@ static std::vector<pos*>* run_a_star(std::vector<pos*>* nodes, std::unordered_ma
 
 	bool reached = false;
 	pos* curr = NULL;
+	pos* best = NULL;
 	double fNew, gNew, hNew;
 	while (openList.size() > 0) {
 		curr = (*(openList.begin())).first;
 		openList.erase(curr);
+
+		if (best == NULL) best = curr;
 
 		closedList.at(curr) = true;
 
@@ -55,9 +58,11 @@ static std::vector<pos*>* run_a_star(std::vector<pos*>* nodes, std::unordered_ma
 			if (nodes->at(i) == goal) {
 				parents.at(nodes->at(i)) = curr;
 				reached = true;
+				best = goal;
 				break;
 			}
 			else if (!closedList.at(nodes->at(i))) {
+				best = nodes->at(i);
 				gNew = g_cost.at(curr) + h_func(curr, nodes->at(i));
 				hNew = h_func(goal, nodes->at(i));
 				fNew = gNew + hNew;
@@ -77,17 +82,16 @@ static std::vector<pos*>* run_a_star(std::vector<pos*>* nodes, std::unordered_ma
 	}
 
 	std::vector<pos*>* path = new std::vector<pos*>();
-	curr = goal;
-	if (parents.at(goal) != NULL) {
-		while (parents.at(curr) != curr) {
-			path->push_back(curr);
-			curr = parents.at(curr);
-		}
+	curr = best;
+	while (parents.at(curr) != curr) {
+		path->push_back(curr);
+		curr = parents.at(curr);
 	}
 	path->push_back(start);
 
+	pos* tmp;
 	for (unsigned int i = 0; i < path->size()/2; i++) {
-		pos* tmp = path->at(i);
+		tmp = path->at(i);
 		path->at(i) = path->at(path->size()-i-1);
 		path->at(path->size()-i-1) = tmp;
 	}
