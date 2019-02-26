@@ -30,9 +30,13 @@ static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<p
 
 	bool reached = false;
 	pos* curr = NULL;
+	pos* best = NULL;
+	double best_dist = std::numeric_limits<double>::max();
 	while (queue.size() > 0) {
 		curr = queue.front();
 		queue.pop();
+
+		if (best == NULL) best = curr;
 
 		int i = 0;
 		for (int w : *(edges->at(curr))) {
@@ -42,13 +46,20 @@ static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<p
 			}
 
 			if (!visited.at(nodes->at(i))) {
-				if (curr == goal) {
+				if (nodes->at(i) == goal) {
+					pred.at(nodes->at(i)) = curr;
 					reached = true;
+					best = goal;
 					break;
 				}
 
 				visited.at(nodes->at(i)) = true;
-				dist.at(nodes->at(i)) = dist.at(curr) + h_func(curr, nodes->at(i));
+				double distance = dist.at(curr) + h_func(curr, nodes->at(i));
+				dist.at(nodes->at(i)) = distance;
+				if (distance < best_dist) {
+					best_dist = distance;
+					best = nodes->at(i);
+				}
 				pred.at(nodes->at(i)) = curr;
 				queue.push(nodes->at(i));
 			}
@@ -60,7 +71,7 @@ static std::vector<pos*>* run_bfs(std::vector<pos*>* nodes, std::unordered_map<p
 
 
 	std::vector<pos*>* path = new std::vector<pos*>();
-	curr = goal;
+	curr = best;
 	while (pred.at(curr) != NULL) {
 		path->push_back(curr);
 		curr = pred.at(curr);
