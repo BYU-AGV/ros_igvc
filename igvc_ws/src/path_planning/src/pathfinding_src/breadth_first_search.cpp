@@ -1,6 +1,6 @@
 /*
 Description: This is a script that implements the breadth first pathfinding algorithm 
-Last Modified: 13 Feb 2019
+Last Modified: 25 Feb 2019
 Author: Isaac Draper
 */
 
