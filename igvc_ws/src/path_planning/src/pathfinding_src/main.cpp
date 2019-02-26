@@ -1,6 +1,6 @@
 /*
 Description: This is the main entry point between python and c++
-Last Modified: 13 Feb 2019
+Last Modified: 25 Feb 2019
 Author: Isaac Draper
 */
 
@@ -46,7 +46,7 @@ static std::vector<pos*>* parseNodes(PyObject* obj) {
 	rws = PySequence_Size(obj);
 
 	std::vector<pos*>* nodes = new std::vector<pos*>();
-	nodes->reserve(rws);
+	// nodes->reserve((int)rws);
 
 	if (PyList_Check(seq)) {
 		for (i = 0; i < rws; i++) {
@@ -62,8 +62,15 @@ static std::vector<pos*>* parseNodes(PyObject* obj) {
 				}
 
 				pos* p = new pos;
-				p->x = PyFloat_AsDouble(PyList_GET_ITEM(row, 0));
-				p->y = PyFloat_AsDouble(PyList_GET_ITEM(row, 1));
+				PyObject* xVal = PyList_GET_ITEM(row, 0);
+				PyObject* yVal = PyList_GET_ITEM(row, 1);
+
+				double x = PyFloat_AsDouble(xVal);
+				double y = PyFloat_AsDouble(yVal);
+				p->x = x;
+				p->y = y;
+				// p->x = PyFloat_AsDouble(xVal);
+				// p->y = PyFloat_AsDouble(yVal);
 
 				nodes->push_back(p);
 			}
@@ -98,15 +105,18 @@ static std::unordered_map<pos*,std::vector<double>*>* parseEdges(std::vector<pos
 			if (PyList_Check(row)) {
 				cls = PySequence_Size(row);
 
-				col = PySequence_Fast(PyList_GET_ITEM(seq, i), "here in rows");
+				PyObject* item = PyList_GET_ITEM(seq, i);
+				col = PySequence_Fast(item, "here in rows");
 
 				std::vector<double>* node = new std::vector<double>();
 
 				if (PyList_Check(col)) {
 					for (j = 0; j < cls; j++) {
-						node->push_back(PyFloat_AsDouble(PyList_GET_ITEM(col, j)));
+						PyObject* val = PyList_GET_ITEM(col, j);
+						node->push_back(PyFloat_AsDouble(val));
 					}
 				}
+
 
 				edges->insert({nodes->at(i), node});
 			}
@@ -144,8 +154,11 @@ static pos* parsePos(PyObject* obj) {
 
 	if (PyList_Check(obj)) {
 		pos* p = new pos;
-		p->x = PyFloat_AsDouble(PyList_GET_ITEM(obj, 0));
-		p->y = PyFloat_AsDouble(PyList_GET_ITEM(obj, 1));
+		PyObject* xVal = PyList_GET_ITEM(obj, 0);
+		PyObject* yVal = PyList_GET_ITEM(obj, 1);
+
+		p->x = PyFloat_AsDouble(xVal);
+		p->y = PyFloat_AsDouble(yVal);
 
 		return p;
 	}
@@ -318,14 +331,19 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 
 	// std::cout << "Ran '" << algorithm << "' using '" << func << "':" << std::endl;
 
-
 	// clean up all memory
+	// TODO: NEED TO FIX ALL MEMORY LEAKS/BUGS - currently will not work (SegFault) if memory is cleared
+	/*
 	for (unsigned int i = 0; i < nodes->size(); i++) {
 		delete edges->at(nodes->at(i));
-		delete nodes->at(i);
+		// delete nodes->at(i); // TODO: NEED TO FIGURE OUT MEMORY ERROR
 	}
+	delete edges;
+	delete nodes;
+
 	delete start;
 	delete goal;
+	*/
 
 	return rtn;
 }
