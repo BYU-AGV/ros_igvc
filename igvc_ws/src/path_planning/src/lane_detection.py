@@ -23,8 +23,8 @@ class LaneDetector():
         self.bridge = CvBridge()
         self.num_col = 21
         self.num_row = 10
-        # self.start_pos = [self.num_row -1 ,(self.num_col - 1) / 2]
-        self.start_pos = [0,0]
+        self.num_ele = self.num_col*self.num_row
+        self.start_pos = [self.num_row-1,(self.num_col-1)/2]
         self.node_thresh = 0.5 #This is the threshold for driveable and not driveable nodes. Is between 0 and 1
 
         println('Lane detection running')
@@ -82,13 +82,11 @@ class LaneDetector():
                     nodes = np.append(nodes,[[i,j]],axis = 0)
 
         edges = np.zeros([self.num_row,self.num_col])
-        edges = np.reshape(edges,(1,self.num_row*self.num_col))
-        for i in range(self.num_row-1):
-            for j in range(self.num_col-1):
+        edges = np.reshape(edges,(1,self.num_ele))
+        for i in range(self.num_row):
+            for j in range(self.num_col):
                 edge_row = np.zeros([self.num_row,self.num_col])
-                # if(node_scores[i,j] > self.node_thresh):
-                if(True):
-                    # rospy.logwarn((i,j))
+                if(node_scores[i,j] > self.node_thresh):
                     if(i == 0 and j == 0):
                         edge_row[(i):(i+2),(j):(j+2)] += kernel[0:2,0:2]
                     elif(i == 0 and j == self.num_col-1):
@@ -107,12 +105,39 @@ class LaneDetector():
                         edge_row[(i-1):(i+2),(j-1):(j+1)] += kernel[0:3,0:2]
                     else:
                         edge_row[(i-1):(i+2),(j-1):(j+2)] += kernel
-                # rospy.logwarn(edge_row.shape)
-                edge_row = np.reshape(edge_row,(1,self.num_row*self.num_col))
-                # rospy.logwarn('Made it past reshape')
+                edge_row = np.reshape(edge_row,(1,self.num_ele))
                 edges = np.append(edges,edge_row,axis = 0)
-                # rospy.logwarn('Made it to end')
+
+        edges = edges[1:self.num_ele+1,:] #Removing the first element we appended for the shape
+
         return nodes, edges
+
+    def plot_path(self,img, path):
+        sz = img.shape
+        num_col = self.num_col
+        num_row = self.num_row
+        win_width = sz[0]//num_row
+        win_height = sz[1]//num_col
+        orig_img = img
+        red = [0, 0, 255]
+        for r,c in path:
+            r = int(r)
+            c = int(c)
+            img[r*win_width:(r+1)*win_width,c*win_height:(c+1)*win_height] = red
+        return self.weighted_img(orig_img, img)
+
+
+    def weighted_img(self,img, initial_img, a=0.0, b=1., y=0.):
+
+        return cv2.addWeighted(initial_img, a, img, b, y)
+
+    def imageCallback(self, msg):
+        try:
+            self.ready = True
+            self.img = self.bridge.imgmsg_to_cv2(msg, "passthrough")
+            self.msgread['image'] = True
+        except CvBridgeError as e:
+            print(e)
 
     def execute(self):
         while is_running():
@@ -121,11 +146,12 @@ class LaneDetector():
             if self.ready and self.display:
                 node_scores, processed_img = self.GetDriveableNodes(img)
                 list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
-                end_pos = [5,5]
+                end_pos = [0,(self.num_col-1)/2]
                 path = pathfinding.search(list_of_nodes, list_of_edges, self.start_pos, end_pos, 'A*')
-                rospy.loginfo(path)
+                path_img = self.plot_path(processed_img,path)
+                # rospy.loginfo(path)
                 if self.display:
-                    cv2.imshow("input", processed_img)
+                    cv2.imshow("input", path_img)
                 else:
                     pass
             else:
@@ -136,13 +162,7 @@ class LaneDetector():
 
 
 
-    def imageCallback(self, msg):
-        try:
-            self.ready = True
-            self.img = self.bridge.imgmsg_to_cv2(msg, "passthrough")
-            self.msgread['image'] = True
-        except CvBridgeError as e:
-            print(e)
+
 
 if __name__ == '__main__':
     println('Starting lane detection node')
