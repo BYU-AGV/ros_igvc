@@ -1,6 +1,6 @@
 /*
 Description: This is the main entry point between python and c++
-Last Modified: 25 Feb 2019
+Last Modified: 11 Mar 2019
 Author: Isaac Draper
 */
 
@@ -37,20 +37,17 @@ PyMODINIT_FUNC initpathfinding(void) {
 // ------------------------------------------------------------------------------------
 
 static std::vector<pos*>* parseNodes(PyObject* obj) {
-	PyObject* seq;
 	Py_ssize_t i, rws, cls;
-
 	PyObject* row;
 	
-	seq = PySequence_Fast(obj, "expected a sequence");
 	rws = PySequence_Size(obj);
 
 	std::vector<pos*>* nodes = new std::vector<pos*>();
-	// nodes->reserve((int)rws);
+	nodes->reserve((int)rws);
 
-	if (PyList_Check(seq)) {
+	if (PyList_Check(obj)) {
 		for (i = 0; i < rws; i++) {
-			row = PySequence_Fast(PyList_GET_ITEM(seq, i), "here in rows");
+			row = PyList_GET_ITEM(obj, i);
 			if (PyList_Check(row)) {
 				cls = PySequence_Size(row);
 
@@ -117,38 +114,23 @@ static std::unordered_map<pos*,std::vector<double>*>* parseEdges(std::vector<pos
 					}
 				}
 
-
 				edges->insert({nodes->at(i), node});
+				Py_DECREF(col);
 			}
 			else {
 				PyErr_SetString(PyExc_TypeError,"Expected a list");
 				return NULL;
 			}
+			Py_DECREF(row);
 		}
 	}
 	else {
 		PyErr_SetString(PyExc_TypeError,"Expected a sequence");
 	}
+	Py_DECREF(seq);
 
 	return edges;
 }
-
-/* DEPRECATED - was only used for inital testing
-static PyObject* nodesToObject(std::vector<pos*>* nodes) {
-	PyObject* obj;
-	PyObject* row;
-
-	obj = PyList_New(nodes->size());
-	for (unsigned int i = 0; i < nodes->size(); i++) {
-		row = PyList_New(2);
-		PyList_SetItem(row, 0, PyFloat_FromDouble(nodes->at(i)->x));
-		PyList_SetItem(row, 1, PyFloat_FromDouble(nodes->at(i)->y));
-		PyList_SetItem(obj, i, row);
-	}
-
-	return obj;
-}
-*/
 
 static pos* parsePos(PyObject* obj) {
 
@@ -261,6 +243,15 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 	pos* start = NULL;
 	pos* goal = NULL;
 
+	/*
+	std::cout << "here" << std::endl;
+	Py_DECREF(obj1);
+	Py_DECREF(obj2);
+	Py_DECREF(obj3);
+	Py_DECREF(obj4);
+	std::cout << "here2" << std::endl;
+	*/
+
 	bool start_found = false;
 	bool goal_found = false;
 	for (auto p : *nodes) {
@@ -308,7 +299,7 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 		PyErr_SetString(PyExc_TypeError,(std::string("Heuristic function '") + func + std::string("' not recognized")).c_str());
 		return NULL;
 	}
-
+	
 	PyObject* rtn = NULL;
 	
 	if (algorithm == "breadth_first_search" ||
@@ -331,19 +322,13 @@ static PyObject* runAlgorithm(PyObject* self, PyObject* args, PyObject* kwargs) 
 
 	// std::cout << "Ran '" << algorithm << "' using '" << func << "':" << std::endl;
 
-	// clean up all memory
-	// TODO: NEED TO FIX ALL MEMORY LEAKS/BUGS - currently will not work (SegFault) if memory is cleared
-	/*
-	for (unsigned int i = 0; i < nodes->size(); i++) {
-		delete edges->at(nodes->at(i));
-		// delete nodes->at(i); // TODO: NEED TO FIGURE OUT MEMORY ERROR
+	for (std::vector<pos*>::iterator it = nodes->begin(); it != nodes->end(); it++) {
+		delete edges->at(*it);
+		delete (*it);
 	}
+
 	delete edges;
 	delete nodes;
-
-	delete start;
-	delete goal;
-	*/
 
 	return rtn;
 }
