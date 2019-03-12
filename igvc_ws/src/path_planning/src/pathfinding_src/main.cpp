@@ -1,6 +1,6 @@
 /*
 Description: This is the main entry point between python and c++
-Last Modified: 11 Mar 2019
+Last Modified: 12 Mar 2019
 Author: Isaac Draper
 */
 
@@ -199,6 +199,13 @@ static fp getHFunction(std::string func) {
 	    func == "manhattan" ||
 	    func == "man") {
 		return man_dist;
+	}
+	else if (func == "gps distance" ||
+	    func == "gps_distance" ||
+	    func == "gps dist" ||
+	    func == "gps_dist" ||
+	    func == "gps") {
+		return gps_dist;
 	}
 
 	return NULL;

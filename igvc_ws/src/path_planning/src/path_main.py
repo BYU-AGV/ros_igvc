@@ -47,7 +47,7 @@ def callback(msg):
 
     path = None
     if len(nodes) > 0:
-        path = pathfinding.search(nodes, edges, nodes[0], nodes[-1])
+        path = pathfinding.search(nodes, edges, nodes[0], nodes[-1], cost_function='gps')
 
     display_graph(g_map, path)
 
