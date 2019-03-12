@@ -2,7 +2,7 @@
 
 '''
 Description: This is a class to represent a 2-d map (top down) of known traversible space
-Last Modified: 13 Feb 2019
+Last Modified: 12 Mar 2019
 Author: Isaac Draper
 '''
 
@@ -158,4 +158,22 @@ class Map(object):
         y_ = self.last_node.get_longitude()
         r = self.last_node.get_radius()
         return x_,y_,r
+
+    def get_nodes_and_edges(self):
+        ''' Returns every node and its connections in a format for the pathfinding module '''
+
+        rtn_nodes = []
+        rtn_edges = [[0 for b in range(len(self.nodes))] for _ in range(len(self.nodes))]
+        for i,n in enumerate(self.nodes):
+            x_ = n.get_latitude()
+            y_ = n.get_longitude()
+            rtn_nodes.append([x_,y_])
+
+            for pn in n.get_parents():
+                if pn == None: continue
+                j = self.nodes.index(pn)
+                rtn_edges[j][i] = 1
+                rtn_edges[i][j] = 1
+
+        return rtn_nodes, rtn_edges
 

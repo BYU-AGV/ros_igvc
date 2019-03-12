@@ -2,7 +2,7 @@
 
 '''
 Description: This is a script for visualizing the global map
-Last Modified: 13 Feb 2019
+Last Modified: 12 Mar 2019
 Author: Isaac Draper
 '''
 
@@ -16,10 +16,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-def display_graph(g_map):
+def display_graph(g_map, path=None):
     ''' This function displays a global map object continuously
 
         Args:   g_map - a Map object
+        
+        kwArgs: path - a list of points to display green as the path
     '''
 
     try: plt.pause(0.05)
@@ -33,10 +35,25 @@ def display_graph(g_map):
     x,y,s,arrows = g_map.get_scatter_data()
 
     # cm = plt.cm.get_cmap('Blues')
-    c = np.linspace(0, 1, len(x))
+    # c = np.linspace(0, 1, len(x))
 
-    plt.scatter(x,y, s=scale_sizes(g_map, s), c=c)
+    p_indicies = []
+    p_plot = []
+    for (x_,y_) in path:
+        try:
+            indicies = [i for i,p in enumerate(zip(x,y)) if p[0] == x_ and p[1] == y_]
+            p_indicies += indicies
+        except ValueError:
+            pass
+
+    scaled = scale_sizes(g_map, s)
+    plt.scatter(x,y, s=scaled, c='black')
     
+    p_plot = [p for i,p in enumerate(zip(x,y)) if i in p_indicies]
+    p_sizes = [scaled[i] for i,p in enumerate(zip(x,y)) if i in p_indicies]
+    path_x,path_y = zip(*p_plot)
+    plt.scatter(path_x, path_y, s=p_sizes, color='lightgreen')
+
     px,py,ps = g_map.get_last_point_scatter()
     plt.scatter(px,py, s=scale_sizes(g_map, ps), color='red')
 

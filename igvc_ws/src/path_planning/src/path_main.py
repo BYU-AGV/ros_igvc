@@ -2,7 +2,7 @@
 
 '''
 Description: This is the main class to call for path navigation
-Last Modified: 8 Feb 2019
+Last Modified: 12 Mar 2019
 Author: Isaac Draper
 '''
 
@@ -14,6 +14,7 @@ from ros_api import println
 
 from global_map import Map
 from visualize import display_graph, close
+import pathfinding
 import signal
 import sys
 
@@ -42,7 +43,13 @@ def callback(msg):
     else:
         g_map.add_node(data['latitude'],data['longitude'],data['accuracy'])
 
-    display_graph(g_map)
+    nodes, edges = g_map.get_nodes_and_edges()
+
+    path = None
+    if len(nodes) > 0:
+        path = pathfinding.search(nodes, edges, nodes[0], nodes[-1], cost_function='gps')
+
+    display_graph(g_map, path)
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit_nicely)
