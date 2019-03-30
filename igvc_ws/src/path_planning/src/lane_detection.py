@@ -3,12 +3,13 @@ import rospy
 import cv2
 import numpy as np
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float64
 from cv_bridge import CvBridge, CvBridgeError
 import custom_msgs.msg as msgs
 import ros_api as ros
 from ros_api import println, is_running
 import pathfinding
-
+import math
 
 class LaneDetector():
     def __init__(self):
@@ -16,6 +17,8 @@ class LaneDetector():
         hz = 30
         self.rate = rospy.Rate(hz)
         self.image_sub = rospy.Subscriber('camera_feed', Image, self.imageCallback)
+        self.heading_pub = rospy.Publisher('desired_heading', Float64)
+        self.heading_msg = Float64()
         self.display = rospy.get_param('~lane_display')
         self.ready = False #TODO: Implement some kind of check that the camera is workin
         self.img = 0
@@ -71,7 +74,7 @@ class LaneDetector():
 
     def buildAlgorithmStructures(self,node_scores):
         kernel = np.array([[0, 1, 0],
-                           [1, 0, 1],
+                           [1, 1, 1],
                            [0, 1, 0]])
         nodes = [[0,0]] #Instantiate the first node
         for i in range(self.num_row):
@@ -110,7 +113,7 @@ class LaneDetector():
 
         edges = edges[1:self.num_ele+1,:] #Removing the first element we appended for the shape
 
-        return nodes, edges
+        return nodes.tolist(), edges.tolist()
 
     def plot_path(self,img, path):
         sz = img.shape
@@ -125,6 +128,28 @@ class LaneDetector():
             c = int(c)
             img[r*win_width:(r+1)*win_width,c*win_height:(c+1)*win_height] = red
         return self.weighted_img(orig_img, img)
+
+    def get_heading(self, path, num_blocks = 5):
+        o_r, o_c = path[0]
+        heading = 0 #Straight ahead is zero, to the right is positive and to the left is negative
+        dx = 0
+        dy = 0
+        for r,c in path[1:num_blocks]:
+            # r = int(r)
+            # c = int(c)
+            dx += (r - o_r)
+            dy += (c - o_c)
+        if dx == 0 and dy > 0:
+            return 90
+        elif dx == 0 and dy < 0:
+            return -90
+        elif dx == 0 and dy == 0:
+            return 0
+        else:
+            heading =  -math.degrees(math.atan(dy/dx))
+            return heading
+
+            img[r*win_width:(r+1)*win_width,c*win_height:(c+1)*win_height] = red
 
 
     def weighted_img(self,img, initial_img, a=0.0, b=1., y=0.):
@@ -146,27 +171,13 @@ class LaneDetector():
             if self.ready and self.display:
                 node_scores, processed_img = self.GetDriveableNodes(img)
                 list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
-                # list_of_nodes = [
-                #         [0,0],
-                #         [1,0],
-                #         [2,0],
-                #         [3,0],
-                #         ]
-                # list_of_edges = [
-                #         [0,1,0,0],
-                #         [0,0,1,0],
-                #         [0,0,0,1],
-                #         [0,0,1,0]
-                #         ]
-                # end_pos = [0,(self.num_col-1)/2]
-                end_pos = [3,0]
-                self.start_pos = [0,0]
-                # println(list_of_edges.shape)
-                # println(len(list_of_nodes))
-
-                path = pathfinding.search(list_of_nodes, list_of_edges, self.start_pos, end_pos, 'A*')
+                end_pos = [0    ,(self.num_col-1)/2]
+                path = pathfinding.search(list_of_nodes, list_of_edges, self.start_pos, end_pos, 'bfs')
                 path_img = self.plot_path(processed_img,path)
-                # rospy.loginfo(path)
+                desired_heading = self.get_heading(path)
+                self.heading_msg.data = desired_heading
+                self.heading_pub.publish(self.heading_msg)
+
                 if self.display:
                     cv2.imshow("input", path_img)
                 else:
