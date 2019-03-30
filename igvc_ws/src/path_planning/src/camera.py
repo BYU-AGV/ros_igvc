@@ -46,5 +46,5 @@ if __name__ == '__main__':
     camera = Camera()
     while is_running():
         camera.execute()
-        self.rate.sleep()
+        rospy.sleep(1)
     println('Node finished with no errors')
