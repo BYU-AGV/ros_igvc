@@ -52,6 +52,9 @@ add_message_files(
   compass.msg
   velocity.msg
   imu_distance.msg
+  image_data_rgb.msg
+  image_data.msg
+  image.msg
 )
 
 # Generate services in the 'srv' folder
