@@ -24,7 +24,7 @@ class pi_cam():
 			self.image = self.rawCapture.array
 			image_msg = msgs.image()
 			image_msg = self.image
-			self.pub_image.publish(image_msg)
+			self.pub_image.publish(480, 720, np.array(image_msg).flatten())
 			self.rawCapture.truncate(0)
 			rospy.sleep(1.0)		
 if __name__ == "__main__":
