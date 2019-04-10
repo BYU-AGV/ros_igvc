@@ -7,6 +7,7 @@ from picamera import PiCamera
 #from custom_msgs.msg import image 
 import time
 import custom_msgs.msg as msgs 
+import numpy as np
 
 class pi_cam():
 	def __init__(self):
@@ -22,9 +23,10 @@ class pi_cam():
 		while not rospy.is_shutdown():
 			self.camera.capture(self.rawCapture, format="bgr")
 			self.image = self.rawCapture.array
-			image_msg = msgs.image()
-			image_msg = self.image
-			self.pub_image.publish(480, 720, np.array(image_msg).flatten())
+                        print(self.image)
+                        print(self.image.flatten())
+                        a = np.array(self.image.flatten())
+			self.pub_image.publish(480, 720, a.tolist())
 			self.rawCapture.truncate(0)
 			rospy.sleep(1.0)		
 if __name__ == "__main__":
