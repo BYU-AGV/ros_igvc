@@ -2,7 +2,7 @@
 import rospy
 import cv2
 import numpy as np
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage, Image
 from cv_bridge import CvBridge, CvBridgeError
 import custom_msgs.msg as msgs
 import ros_api as ros
@@ -15,7 +15,8 @@ class LaneDetector():
         rospy.init_node('lane_detection')
         hz = 30
         self.rate = rospy.Rate(hz)
-        self.image_sub = rospy.Subscriber('camera_feed', Image, self.imageCallback)
+        self.image_sub = rospy.Subscriber('/raspicam_node/image', Image, self.imageCallback)
+        self.result_pub = rospy.Publisher('/pathfinding_feed', Image, queue_size=1)
         self.display = rospy.get_param('~lane_display')
         self.ready = False #TODO: Implement some kind of check that the camera is workin
         self.img = 0
@@ -30,7 +31,7 @@ class LaneDetector():
         println('Lane detection running')
 
     def GetDriveableNodes(self, img):
-        img = img[0:640,:,:]
+        #img = img[0:640,:,:]
         img = cv2.GaussianBlur(img,(11,11),0)
         sz = img.shape
         num_col = self.num_col
@@ -139,6 +140,14 @@ class LaneDetector():
         except CvBridgeError as e:
             print(e)
 
+    def piImageCallback(self, msg):
+        try:
+            self.ready = True
+            self.img = self.bridge.imgmsg_to_cv2(msg)
+            self.msgread['image'] = True
+        except CvBridgeError as e:
+            print(e)
+
     def execute(self):
         while is_running():
             img = self.img
@@ -149,9 +158,11 @@ class LaneDetector():
                 end_pos = [0,(self.num_col-1)/2]
                 path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'bfs')
                 path_img = self.plot_path(processed_img,path)
-                # rospy.loginfo(path)
+                #rospy.loginfo(path_img.shape,path_img.dtype)
+                self.result_pub.publish(self.bridge.cv2_to_imgmsg(path_img, "bgr8"))
                 if self.display:
-                    cv2.imshow("input", path_img)
+                    pass
+                    #cv2.imshow("input", path_img)
                 else:
                     pass
             else:
