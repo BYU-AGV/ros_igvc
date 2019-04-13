@@ -147,7 +147,7 @@ class LaneDetector():
                 node_scores, processed_img = self.GetDriveableNodes(img)
                 list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
                 end_pos = [0,(self.num_col-1)/2]
-                path = pathfinding.search(list_of_nodes, list_of_edges, self.start_pos, end_pos, 'A*')
+                path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'bfs')
                 path_img = self.plot_path(processed_img,path)
                 # rospy.loginfo(path)
                 if self.display:
