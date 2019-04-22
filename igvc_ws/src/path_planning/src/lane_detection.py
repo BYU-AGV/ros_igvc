@@ -2,9 +2,11 @@
 import rospy
 import cv2
 import numpy as np
+import math
 from sensor_msgs.msg import CompressedImage, Image
 from cv_bridge import CvBridge, CvBridgeError
 import custom_msgs.msg as msgs
+from std_msgs.msg import Float64
 import ros_api as ros
 from ros_api import println, is_running
 import pathfinding
@@ -16,6 +18,7 @@ class LaneDetector():
         hz = 30
         self.rate = rospy.Rate(hz)
         self.image_sub = rospy.Subscriber('/raspicam_node/image', Image, self.imageCallback)
+        self.heading_pub = rospy.Publisher('desired_heading', Float64, queue_size=1)
         self.result_pub = rospy.Publisher('/pathfinding_feed', Image, queue_size=1)
         self.display = rospy.get_param('~lane_display')
         self.ready = False #TODO: Implement some kind of check that the camera is workin
@@ -158,19 +161,39 @@ class LaneDetector():
                 end_pos = [0,(self.num_col-1)/2]
                 path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'bfs')
                 path_img = self.plot_path(processed_img,path)
-                #rospy.loginfo(path_img.shape,path_img.dtype)
+                desired_heading = self.get_heading(path)
+                self.heading_msg.data = desired_heading
+                self.heading_pub.publish(self.heading_msg)
                 self.result_pub.publish(self.bridge.cv2_to_imgmsg(path_img, "bgr8"))
-                if self.display:
-                    pass
-                    #cv2.imshow("input", path_img)
-                else:
-                    pass
             else:
                 pass
             key = cv2.waitKey(10)
             if key == 27:
                 break
 
+    def get_heading(self, path, num_blocks = 5):
+        o_r, o_c = path[0]
+        heading = 0 #Straight ahead is zero, to the right is positive and to the left is negative
+        dx = 0
+        dy = 0
+        if(len(path) < num_blocks):
+            num_blocks = len(path)
+        for r,c in path[1:num_blocks]:
+            # r = int(r)
+            # c = int(c)
+            dx += (r - o_r)
+            dy += (c - o_c)
+        if dx == 0 and dy > 0:
+            return 90
+        elif dx == 0 and dy < 0:
+            return -90
+        elif dx == 0 and dy == 0:
+            return 0
+        else:
+            heading =  -math.degrees(math.atan(dy/dx))
+            return heading
+
+            img[r*win_width:(r+1)*win_width,c*win_height:(c+1)*win_height] = red
 
 
 
