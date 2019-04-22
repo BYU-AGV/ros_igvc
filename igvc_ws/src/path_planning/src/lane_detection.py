@@ -15,11 +15,12 @@ import pathfinding
 class LaneDetector():
     def __init__(self):
         rospy.init_node('lane_detection')
-        hz = 30
+        hz = 10
         self.rate = rospy.Rate(hz)
         self.image_sub = rospy.Subscriber('/raspicam_node/image', Image, self.imageCallback)
         self.heading_pub = rospy.Publisher('desired_heading', Float64, queue_size=1)
         self.result_pub = rospy.Publisher('/pathfinding_feed', Image, queue_size=1)
+        self.heading_msg = Float64()
         self.display = rospy.get_param('~lane_display')
         self.ready = False #TODO: Implement some kind of check that the camera is workin
         self.img = 0
@@ -46,7 +47,7 @@ class LaneDetector():
         nodes = []
         node_scores = np.empty(num_col*num_row, dtype = np.float32)
 
-        hls = cv2.cvtColor(img,cv2.COLOR_RGB2HLS)
+        hls = cv2.cvtColor(img.astype(np.uint8),cv2.COLOR_RGB2HLS)
         light = hls[:,:,1] > 140
         saturation = hls[:,:,2] < 100
         sat_and_light = np.logical_and(saturation, light)
@@ -159,7 +160,7 @@ class LaneDetector():
                 node_scores, processed_img = self.GetDriveableNodes(img)
                 list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
                 end_pos = [0,(self.num_col-1)/2]
-                path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'bfs')
+                path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'A*')
                 path_img = self.plot_path(processed_img,path)
                 desired_heading = self.get_heading(path)
                 self.heading_msg.data = desired_heading
