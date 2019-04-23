@@ -152,26 +152,6 @@ class LaneDetector():
         except CvBridgeError as e:
             print(e)
 
-    def execute(self):
-        while is_running():
-            img = self.img
-            # println(np.max(img),np.min(img))
-            if self.ready and self.display:
-                node_scores, processed_img = self.GetDriveableNodes(img)
-                list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
-                end_pos = [0,(self.num_col-1)/2]
-                path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'A*')
-                path_img = self.plot_path(processed_img,path)
-                desired_heading = self.get_heading(path)
-                self.heading_msg.data = desired_heading
-                self.heading_pub.publish(self.heading_msg)
-                self.result_pub.publish(self.bridge.cv2_to_imgmsg(path_img, "bgr8"))
-            else:
-                pass
-            key = cv2.waitKey(10)
-            if key == 27:
-                break
-
     def get_heading(self, path, num_blocks = 5):
         o_r, o_c = path[0]
         heading = 0 #Straight ahead is zero, to the right is positive and to the left is negative
@@ -196,14 +176,32 @@ class LaneDetector():
 
             img[r*win_width:(r+1)*win_width,c*win_height:(c+1)*win_height] = red
 
+    def execute(self):
+        if self.ready and self.display:
+            node_scores, processed_img = self.GetDriveableNodes(self.img)
+            list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
+            end_pos = [0,(self.num_col-1)/2]
+            path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'A*')
+            path_img = self.plot_path(processed_img,path)
+            self.heading_msg.data = self.get_heading(path)
+            self.heading_pub.publish(self.heading_msg)
+            self.result_pub.publish(self.bridge.cv2_to_imgmsg(path_img, "bgr8"))
+
+        else:
+            pass
+        key = cv2.waitKey(10)
+        if key == 27:
+            break
+
+
+
 
 
 
 if __name__ == '__main__':
     println('Starting lane detection node')
     lane_detector = LaneDetector()
-    while is_running():
-        rospy.sleep(1)
+    while is_running()
         lane_detector.execute()
 
     println('Node finished with no errors')
