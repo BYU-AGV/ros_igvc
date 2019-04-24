@@ -48,7 +48,11 @@ class LaneDetector():
         node_scores = np.empty(num_col*num_row, dtype = np.float32)
 
         hls = cv2.cvtColor(img.astype(np.uint8),cv2.COLOR_RGB2HLS)
+<<<<<<< HEAD
         light = hls[:,:,1] > 150
+=======
+        light = hls[:,:,1] > 140
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
         saturation = hls[:,:,2] < 100
         sat_and_light = np.logical_and(saturation, light)
 
@@ -175,6 +179,7 @@ class LaneDetector():
             return heading
 
             img[r*win_width:(r+1)*win_width,c*win_height:(c+1)*win_height] = red
+<<<<<<< HEAD
     def get_heading_ghetto(self,left_weight, right_weight):
         diff = left_weight - right_weight
         if(diff > 8):
@@ -190,11 +195,14 @@ class LaneDetector():
 
 
 
+=======
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
     def execute(self):
         if self.ready and self.display:
             node_scores, processed_img = self.GetDriveableNodes(self.img)
             list_of_nodes, list_of_edges = self.buildAlgorithmStructures(node_scores)
+<<<<<<< HEAD
             # rospy.loginfo(node_scores[5,:])
             left_weight = np.sum(node_scores[4:8,5:11])
             right_weight = np.sum(node_scores[4:8,12:18])
@@ -204,6 +212,20 @@ class LaneDetector():
 
             self.heading_pub.publish(self.heading_msg)
 
+=======
+            end_pos = [0,(self.num_col-1)/2]
+            path = pathfinding.search(list_of_nodes.tolist(), list_of_edges.tolist(), self.start_pos, end_pos, 'A*')
+            path_img = self.plot_path(processed_img,path)
+            self.heading_msg.data = self.get_heading(path)
+            self.heading_pub.publish(self.heading_msg)
+            self.result_pub.publish(self.bridge.cv2_to_imgmsg(path_img, "bgr8"))
+
+        else:
+            pass
+        key = cv2.waitKey(10)
+        if key == 27:
+            break
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
 
 
@@ -213,7 +235,11 @@ class LaneDetector():
 if __name__ == '__main__':
     println('Starting lane detection node')
     lane_detector = LaneDetector()
+<<<<<<< HEAD
     while is_running():
+=======
+    while is_running()
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
         lane_detector.execute()
 
     println('Node finished with no errors')

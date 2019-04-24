@@ -2,11 +2,6 @@
     <arg name="cam_display"   default="false" />
     <arg name="lane_display"   default="true" />
 
-<!--    <node pkg="path_planning" type="camera.py" name="camera"
-      output="screen" required="true">
-      <param name="cam_display"         value="$(arg cam_display)" />
-    </node>
--->
     <node pkg="path_planning" type="lane_detection.py" name="lane_detector"
       output="screen" required="true">
       <param name="lane_display"         value="$(arg lane_display)" />

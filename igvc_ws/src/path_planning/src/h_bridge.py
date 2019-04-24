@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+#/usr/bin/env python
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 #!/usr/bin/env python
 import rospy
 # import cv2
@@ -11,8 +15,14 @@ import RPi.GPIO as GPIO
 from time import sleep
 import select
 import sys
+<<<<<<< HEAD
 
 class H_Bridge():
+=======
+import keyboard
+
+class H_Bridge(object):
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
     def __init__(self, pwm_pin, dir_pin, en_pin, speed=0, direction=0, enabled=True):
         self.pwm_pin = pwm_pin
         self.dir_pin = dir_pin
@@ -25,6 +35,10 @@ class H_Bridge():
         self.command = " "
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
     def init(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pwm_pin, GPIO.OUT)
@@ -38,7 +52,11 @@ class H_Bridge():
 
 
     def set_speed(self, speed):
+<<<<<<< HEAD
         self.speed = speed*2
+=======
+        self.speed = speed
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
         self.pwm.ChangeDutyCycle(self.speed)
 
 
@@ -70,10 +88,16 @@ class DriveController(object):
         self.des_heading = 0
         self.alpha = 0.25
         self.MIN_OFFSET_THRESH = 15
+<<<<<<< HEAD
         self.BIG_OFFSET = 60
         self.ready=False
 
         rospy.init_node('DriveControl')
+=======
+        self.BIG_OFFSET = 40
+
+        rospy.init_node('Drive Control Node')
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
         hz = 30
         self.rate = rospy.Rate(hz)
         self.heading_sub = rospy.Subscriber('/desired_heading', Float64, self.headingCallback)
@@ -82,6 +106,10 @@ class DriveController(object):
         self.msgread = {'heading': False}
 
     def headingCallback(self, msg):
+<<<<<<< HEAD
+=======
+        try:
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
             self.ready = True
             self.msgread['heading'] = True
             self.des_heading = (1-self.alpha)*self.des_heading + (self.alpha)*msg.data
@@ -93,43 +121,71 @@ class DriveController(object):
             left.enable()
             self.left.set_speed(15)
             self.right.set_speed(15)
+<<<<<<< HEAD
             rospy.loginfo('drive forward')
+=======
+            rospy.loginf('drive forward')
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
     def big_right_turn(self):
             right.set_dir(0)
             left.set_dir(0)
             right.enable()
             left.enable()
+<<<<<<< HEAD
             self.left.set_speed(35)
             self.right.set_speed(0)
             rospy.loginfo('big right turn')
+=======
+            self.left.set_speed(20)
+            self.right.set_speed(10)
+            rospy.loginf('big right turn')
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
     def little_right_turn(self):
             right.set_dir(0)
             left.set_dir(0)
             right.enable()
             left.enable()
+<<<<<<< HEAD
             self.left.set_speed(25)
             self.right.set_speed(2)
             rospy.loginfo('little right turn')
+=======
+            self.left.set_speed(15)
+            self.right.set_speed(10)
+            rospy.loginf('little right turn')
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
     def big_left_turn(self):
             right.set_dir(0)
             left.set_dir(0)
             right.enable()
             left.enable()
+<<<<<<< HEAD
             self.left.set_speed(0)
             self.right.set_speed(35)
             rospy.loginfo('big left turn')
+=======
+            self.left.set_speed(10)
+            self.right.set_speed(20)
+            rospy.loginf('big left turn')
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
     def little_left_turn(self):
             right.set_dir(0)
             left.set_dir(0)
             right.enable()
             left.enable()
+<<<<<<< HEAD
             self.left.set_speed(2)
             self.right.set_speed(25)
             rospy.loginfo('little left turn')
+=======
+            self.left.set_speed(10)
+            self.right.set_speed(10)
+            rospy.loginf('little left turn')
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
 
 
     def execute(self):
@@ -159,7 +215,11 @@ if __name__ == '__main__':
 
 
     while is_running():
+<<<<<<< HEAD
         rospy.sleep(1)
+=======
+        rospy.slepe(1)
+>>>>>>> eb14c64497a1e87aca2d33d4ee6cdc4dfe6a8af1
         DriveController.execute()
     GPIO.cleanup()
     println('Node finished with no errors')
